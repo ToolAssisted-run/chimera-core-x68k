@@ -1,0 +1,3 @@
+libco, as the ares core carries it (ares/libco; ISC licence, Copyright byuu
+and the ares team). One cothread runs MAME's machine loop; each frame's end
+switches back to the caller (x68k-driver.cpp).
