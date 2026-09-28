@@ -1,0 +1,34 @@
+# The part of MAME this core builds (waterbox/checkout-mame.sh): the build
+# system, the emulator, the X68000's driver and every device, and the
+# third-party code those compile against. Read from the compiler's own
+# dependency files of a full build (plus the layout the driver's generated
+# x68000.lh is made from), and proven by a build from exactly this.
+/makefile
+/COPYING
+/docs/legal/
+/regtests/
+/scripts/
+/src/emu/
+/src/lib/
+/src/osd/
+/src/devices/
+/src/frontend/
+/src/mame/mame.lst
+/src/mame/layout/x68000.lay
+/src/mame/sharp/
+/3rdparty/genie/
+/3rdparty/aes256cbc/
+/3rdparty/asio/
+/3rdparty/expat/
+/3rdparty/flac/
+/3rdparty/libjpeg/
+/3rdparty/lzma/
+/3rdparty/nanosvg/
+/3rdparty/pugixml/
+/3rdparty/rapidjson/
+/3rdparty/softfloat3/
+/3rdparty/utf8proc/
+/3rdparty/wdlfft/
+/3rdparty/ymfm/
+/3rdparty/zlib/
+/3rdparty/zstd/
