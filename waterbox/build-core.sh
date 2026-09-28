@@ -26,7 +26,22 @@ done
 mb="$(cd "$mb" && pwd)"
 mame="$root/extern/mame"
 lib="$root/build/mame-$flavor/linux_gcc/bin/x64/Release"
-[ -f "$lib/libemu.a" ] || sh "$here/build-mame.sh" "$flavor" -m "$mb"
+# MAME's libraries, rebuilt from nothing whenever what they were built from
+# changes: the pinned commit, the patch series, build-mame.sh's flags, and for
+# the guest the toolchain. A flag change rebuilds nothing in MAME's makefiles,
+# and an object built the old way reports nothing either.
+inputs="$( {
+	git -C "$root" ls-tree HEAD extern/mame
+	cat "$here/build-mame.sh" "$root"/patches/*.patch
+	gcc -dumpfullversion
+	[ "$flavor" = guest ] && cat "$mb/build/meson-cpp/guest-sysroot/lib/musl-gcc.specs"
+} 2>/dev/null | sha1sum | cut -c1-40)"
+stamp="$root/build/mame-$flavor/chimera-inputs"
+if [ ! -f "$lib/libemu.a" ] || [ "$(cat "$stamp" 2>/dev/null)" != "$inputs" ]; then
+	[ -f "$lib/libemu.a" ] && { echo "MAME's $flavor inputs changed: rebuilding it"; rm -rf "$root/build/mame-$flavor"; }
+	sh "$here/build-mame.sh" "$flavor" -m "$mb"
+	echo "$inputs" > "$stamp"
+fi
 obj="$root/build/$flavor"
 mkdir -p "$obj"
 
