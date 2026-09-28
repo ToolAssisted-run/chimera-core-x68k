@@ -94,6 +94,18 @@ else
 	report FAIL "core.wbx is not stale" "older than:$stale"
 fi
 
+# MAME's cothread stack is a stack to the sandbox: mmap'd with MAP_STACK, not
+# malloc'd. On Windows miniBox cannot deliver a fault on a page the stack
+# pointer is in unless it was told the page is a stack, and the process died on
+# the first frame with 0xC0000005 and no word (miniBox memblock.c). Linux runs
+# the same core either way, so this is where it can be seen.
+if nm "$root/build/guest/libco.o" 2>/dev/null | grep -q ' U mmap$' \
+	&& ! nm "$root/build/guest/libco.o" 2>/dev/null | grep -q ' U malloc$'; then
+	report PASS "MAME's stack is a MAP_STACK mapping" "what Windows needs to run it"
+else
+	report FAIL "MAME's stack is a MAP_STACK mapping" "libco.o takes it from malloc: the core dies on Windows"
+fi
+
 # The declarations hold together: every control has a binding entry, every
 # IPL-ROM has its firmware, the slots are well formed. Needs nothing but them.
 python3 - "$config" "$here/default_keybinds.json" "$here/file_slots.json" > "$work/decl.log" 2>&1 <<'PY' && ok=1 || ok=0

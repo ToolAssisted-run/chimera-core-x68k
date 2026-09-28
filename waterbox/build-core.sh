@@ -83,8 +83,14 @@ compile_cxx "$root/build/mame-$flavor/generated/mame/x68k/drivlist.cpp" "$obj/dr
 compile_cxx "$here/x68k-driver.cpp" "$obj/x68k-driver.o"
 compile_cxx "$here/emulator-info.cpp" "$obj/emulator-info.o"
 compile_cxx "$here/wbx-entry.cpp" "$obj/wbx-entry.o" $shim $guestinc
+# MAME runs on a libco cothread, and that stack must come from mmap with
+# MAP_STACK rather than malloc: miniBox tracks writes by protecting pages, and on
+# Windows a fault on the page the stack pointer is in cannot be delivered at all
+# unless the sandbox was told the page is a stack (miniBox memblock.c). Out of
+# malloc, the process died on its first frame with 0xC0000005 and no word -
+# mame_main's stack probe was the first write.
 # shellcheck disable=SC2086
-eval $cc $cflags -c "$here/libco/libco.c" -o "$obj/libco.o"
+eval $cc $cflags -DCO_MMAP_STACKS=1 -c "$here/libco/libco.c" -o "$obj/libco.o"
 objs="$objs $obj/drivlist.o $obj/x68k-driver.o $obj/emulator-info.o $obj/libco.o"
 
 libs="$lib/mame_x68k/libmame_x68k.a $lib/mame_x68k/liboptional.a $lib/libemu.a $lib/mame_x68k/libdasm.a
