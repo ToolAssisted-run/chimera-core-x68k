@@ -131,23 +131,29 @@ static int gate_parse_opts(int argc, char **argv, int first, struct gate_opts *o
 	return 1;
 }
 
-/* Is this panel control a player's (not the cabinet's Service/Test/Reset)? */
+/* The widest panel the harness drives (the X68000's is 130). */
+#define GATE_MAX_BUTTONS 256
+
+/* Is this panel control one the exercise may press: a player's, a key of the
+ * keyboard or a mouse button (not a cabinet's Service/Test/Reset)? */
 static int gate_is_player(const struct gate_core *c, int i)
 {
 	const char *n = c->button_name(i);
-	return n && n[0] == 'P' && n[1] >= '1' && n[1] <= '9' && n[2] == ' ';
+	if (!n) return 0;
+	return (n[0] == 'P' && n[1] >= '1' && n[1] <= '9' && n[2] == ' ')
+		|| !strncmp(n, "Key ", 4) || !strncmp(n, "Mouse ", 6);
 }
 
-/* The exercise: an LCG picks, every 6 frames, one live player control and
- * holds it for 3. Coin and Start are players' controls too, so a run that
- * exercises long enough also starts a game. */
+/* The exercise: an LCG picks, every 6 frames, one live control and holds it
+ * for 3. Start is a player's control too, so a run that exercises long
+ * enough also starts a game. */
 static void gate_exercise(const struct gate_core *c, long frame, uint8_t *held)
 {
 	static uint32_t seed = 12345;
 	const int count = c->button_count();
 	if (frame % 6 == 0)
 	{
-		memset(held, 0, 64);
+		memset(held, 0, GATE_MAX_BUTTONS);
 		seed = seed * 1103515245u + 12345u;
 		for (int tries = 0; tries < count; tries++)
 		{
@@ -157,7 +163,7 @@ static void gate_exercise(const struct gate_core *c, long frame, uint8_t *held)
 		}
 	}
 	else if (frame % 6 == 3)
-		memset(held, 0, 64);
+		memset(held, 0, GATE_MAX_BUTTONS);
 }
 
 static uint64_t gate_ram_hash(const struct gate_core *c)
@@ -185,7 +191,7 @@ static int gate_run(const struct gate_core *c, const struct gate_opts *o)
 	}
 	if (o->listDips && c->describe)
 		fputs(c->describe(), stdout);
-	uint8_t held[64] = {0};
+	uint8_t held[GATE_MAX_BUTTONS] = {0};
 	long lag = 0;
 	for (long f = 1; f <= o->frames; f++)
 	{
@@ -197,7 +203,7 @@ static int gate_run(const struct gate_core *c, const struct gate_opts *o)
 			for (int a = 0; a < c->axis_count(); a++)
 				if (c->axis_active(a))
 					c->set_axis(a, (int32_t)((f * 37 + a * 311) % 2048) - 1024);
-		for (int i = 0; i < count && i < 64; i++)
+		for (int i = 0; i < count && i < GATE_MAX_BUTTONS; i++)
 		{
 			int on = held[i];
 			for (int p = 0; p < o->presses; p++)
