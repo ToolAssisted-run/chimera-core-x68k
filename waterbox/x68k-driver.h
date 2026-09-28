@@ -9,7 +9,7 @@
 extern "C" {
 #endif
 
-// Settings, before x68k_init. Names are MAME's own options (bios, ramsize,
+// Settings, before x68k_init. Names are MAME's own options (bios, ram,
 // rtc, flop1, flop2, ...); "rompath" is where the firmware files are.
 void x68k_set_option(const char *name, const char *value);
 
@@ -42,6 +42,15 @@ int x68k_refresh_millihertz(void);
 
 // The machine's RAM, for digests and the memory domain.
 uint8_t *x68k_ram(uint32_t *size);
+
+// The 16 KB battery-backed SRAM (the machine's settings: boot device, memory
+// switches, and what a program keeps there), in the machine's own byte order -
+// big-endian words, as the X68000 holds it and as a dump of one reads. Set
+// before x68k_init to power on with it (MAME's own nvram file, in the host's
+// order, is recognised by its signature and accepted too); read back any time
+// after. 0 on success.
+int x68k_set_sram(const uint8_t *data, uint32_t size);
+const uint8_t *x68k_sram(uint32_t *size);
 
 #ifdef __cplusplus
 }

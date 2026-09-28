@@ -96,6 +96,7 @@ int main(int argc, char **argv)
 				(unsigned long long)fnv(0, ram, ramsize), w, h, (unsigned long long)fnv(0, v, size_t(w) * h * 4),
 				n, (unsigned long long)fnv(0, s, size_t(n) * 4));
 	}
+	std::printf("refresh %d mHz\n", x68k_refresh_millihertz());
 	std::printf("stream ram %016llx vid %016llx aud %016llx\n", (unsigned long long)ram_acc,
 		(unsigned long long)vid_acc, (unsigned long long)aud_acc);
 	return 0;

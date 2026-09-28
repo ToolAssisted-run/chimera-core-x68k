@@ -1,0 +1,102 @@
+{
+  "package": "x68k",
+  "effectiveTerms": "GPL-2.0 (MAME as a whole)",
+  "commercialUse": "allowed under the GPL",
+  "note": "The built core combines this repository's integration (MIT) with MAME, which as a whole is made available under the GNU GPL version 2 (extern/mame/COPYING); its X68000 driver (src/mame/sharp/x68k.cpp) and most of the devices it uses are BSD-3-Clause, as their own headers say. MAME's third-party libraries linked in are permissive: expat and utf8proc MIT, zlib Zlib, FLAC and zstd BSD-3-Clause, SoftFloat 3 BSD-3-Clause, ymfm BSD-3-Clause, WDL's FFT zlib-style, the LZMA SDK public domain, and libjpeg the IJG licence. The package carries no ROM and no disk: the IPL-ROM and the character generator ROM are Sharp's, supplied by the user as the project's firmware.",
+  "components": [
+    {
+      "name": "chimera-core-x68k (integration)",
+      "license": "MIT, and MAME's terms for patches/",
+      "url": "https://github.com/ToolAssisted-run/chimera-core-x68k",
+      "commit": "{selfCommit}",
+      "file": "LICENSE",
+      "sourceUrl": "https://github.com/ToolAssisted-run/chimera-core-x68k/archive/{commit}.tar.gz"
+    },
+    {
+      "name": "MAME",
+      "license": "GPL-2.0 as a whole; the X68000 driver BSD-3-Clause",
+      "url": "https://github.com/mamedev/mame",
+      "commit": "{submodule:extern/mame}",
+      "file": "extern/mame/COPYING",
+      "sourceUrl": "https://github.com/mamedev/mame/archive/{commit}.tar.gz"
+    },
+    {
+      "name": "BSD-3-Clause (MAME's text, for the driver and devices)",
+      "license": "BSD-3-Clause",
+      "url": "https://github.com/mamedev/mame/tree/master/docs/legal",
+      "file": "extern/mame/docs/legal/BSD-3-Clause"
+    },
+    {
+      "name": "GPL-2.0 (MAME's text)",
+      "license": "GPL-2.0",
+      "url": "https://github.com/mamedev/mame/tree/master/docs/legal",
+      "file": "extern/mame/docs/legal/GPL-2.0"
+    },
+    {
+      "name": "Expat (bundled by MAME)",
+      "license": "MIT",
+      "url": "https://libexpat.github.io",
+      "file": "extern/mame/3rdparty/expat/COPYING"
+    },
+    {
+      "name": "zlib (bundled by MAME)",
+      "license": "Zlib",
+      "url": "https://zlib.net",
+      "file": "extern/mame/3rdparty/zlib/LICENSE"
+    },
+    {
+      "name": "FLAC (bundled by MAME)",
+      "license": "BSD-3-Clause",
+      "url": "https://xiph.org/flac",
+      "file": "extern/mame/3rdparty/flac/COPYING.Xiph"
+    },
+    {
+      "name": "Zstandard (bundled by MAME)",
+      "license": "BSD-3-Clause",
+      "url": "https://github.com/facebook/zstd",
+      "file": "extern/mame/3rdparty/zstd/LICENSE"
+    },
+    {
+      "name": "utf8proc (bundled by MAME)",
+      "license": "MIT",
+      "url": "https://github.com/JuliaStrings/utf8proc",
+      "file": "extern/mame/3rdparty/utf8proc/LICENSE.md"
+    },
+    {
+      "name": "Berkeley SoftFloat 3 (bundled by MAME)",
+      "license": "BSD-3-Clause",
+      "url": "http://www.jhauser.us/arithmetic/SoftFloat.html",
+      "file": "extern/mame/3rdparty/softfloat3/COPYING.txt"
+    },
+    {
+      "name": "ymfm (bundled by MAME)",
+      "license": "BSD-3-Clause",
+      "url": "https://github.com/aaronsgiles/ymfm",
+      "file": "extern/mame/3rdparty/ymfm/LICENSE"
+    },
+    {
+      "name": "WDL FFT (bundled by MAME)",
+      "license": "WDL (zlib-style)",
+      "url": "https://www.cockos.com/wdl",
+      "file": "extern/mame/3rdparty/wdlfft/fft.h"
+    },
+    {
+      "name": "LZMA SDK (bundled by MAME)",
+      "license": "Public domain",
+      "url": "https://www.7-zip.org/sdk.html",
+      "file": "extern/mame/3rdparty/lzma/DOC/lzma-sdk.txt"
+    },
+    {
+      "name": "libjpeg (bundled by MAME)",
+      "license": "IJG",
+      "url": "https://ijg.org",
+      "file": "extern/mame/3rdparty/libjpeg/README"
+    },
+    {
+      "name": "libco (ares)",
+      "license": "ISC",
+      "url": "https://github.com/ares-emulator/ares",
+      "file": "waterbox/libco/README"
+    }
+  ]
+}

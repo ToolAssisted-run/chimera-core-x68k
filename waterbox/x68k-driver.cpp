@@ -27,6 +27,7 @@
 #include "render.h"
 #include "rendersw.hxx"
 #include "drivenum.h"
+#include "machine/nvram.h"
 #include "machine/ram.h"
 #include "screen.h"
 #include "sound.h"
@@ -34,6 +35,9 @@
 #include "ui/uimain.h"
 #include "osdepend.h"
 #include "modules/lib/osdobj_common.h"
+
+#include "ioprocs.h"
+#include "ioprocsvec.h"
 
 #include "libco/libco.h"
 #include "x68k-driver.h"
@@ -47,13 +51,13 @@ namespace {
 
 // ---- the panel -----------------------------------------------------------
 // Built from the machine itself, once its ports exist (chimera_manager::
-// before_load_settings): every key of the X68000 keyboard, both joysticks
-// (FM Towns pads: the four directions, A, B, Run, Select) and the mouse's
-// buttons, in the order MAME lists its ports. Each is bound to an input item
-// of its own on the core's devices - not left on MAME's defaults, which put
-// both joysticks on the keyboard and the mouse on a player that is not there.
-// gen-config.py writes waterbox.config from the same list (run-native
-// --list-panel), so the two cannot disagree on the order.
+// before_load_settings): both joysticks (FM Towns pads: the four directions,
+// A, B, Run - named Start - and Select), every key of the X68000 keyboard and
+// the mouse's buttons, in the order MAME lists its ports. Each is bound to an
+// input item of its own on the core's devices - not left on MAME's defaults,
+// which put both joysticks on the keyboard and the mouse on a player that is
+// not there. gen-config.py writes waterbox.config from the same list
+// (x68k-probe --list-panel), and the gate checks the two still agree.
 struct panel_entry { std::string name; int slot; };
 std::vector<panel_entry> s_panel;
 constexpr int kSlotsPerDevice = 100;
@@ -65,7 +69,8 @@ s32 read_slot(void *, void *item) { return s_slot[uintptr_t(item)]; }
 s32 read_mouse_axis(void *, void *item) { return s_mouse_axis[uintptr_t(item)] * osd::input_device::RELATIVE_PER_PIXEL; }
 
 // A panel name from a field's: the English part of "かな (Kana)", the first
-// legend of "1  !  ぬ", and "Key " before a key of the keyboard.
+// legend of "1  !  ぬ", "Key " before a key of the keyboard, and Start for a
+// joystick's Run.
 std::string panel_name(ioport_field const &field)
 {
 	std::string n = field.name();
@@ -76,6 +81,10 @@ std::string panel_name(ioport_field const &field)
 		n = n.substr(0, gap);
 	if (n == "\xc2\xa5") n = "Yen";   // the key with the yen sign on it
 	if (field.type_class() == INPUT_CLASS_KEYBOARD) return "Key " + n;
+	// the FM Towns pad's RUN is its start button (MAME's IPT_START), and "Run"
+	// would share its column letter with Right
+	if (field.type() == IPT_START && n.size() > 4 && n.compare(n.size() - 4, 4, " Run") == 0)
+		return n.substr(0, n.size() - 4) + " Start";
 	if (field.type() == IPT_BUTTON1 && std::string_view(field.port().tag()).find("mouse") != std::string_view::npos) return "Mouse Left";
 	if (field.type() == IPT_BUTTON2 && std::string_view(field.port().tag()).find("mouse") != std::string_view::npos) return "Mouse Right";
 	return n;
@@ -124,6 +133,40 @@ bool s_stopped;
 std::string s_error;
 std::map<std::string, std::string> s_options;
 running_machine *s_machine;
+
+// ---- the SRAM ------------------------------------------------------------
+// MAME keeps the 16 KB as 16-bit words in the host's order and reads and writes
+// it through the nvram device as raw bytes; the core hands it out, and takes it
+// in, in the machine's order. The signature at its start ("\x82\x77" of the
+// full-width X, then "68000W") says which order a file is in.
+constexpr uint32_t kSramSize = 0x4000;
+std::vector<uint8_t> s_sram_in, s_sram_out;
+
+nvram_device *sram_device()
+{
+	return s_machine ? s_machine->root_device().subdevice<nvram_device>("nvram") : nullptr;
+}
+
+// machine order <-> host order: each word's two bytes, whichever way round the
+// host keeps them
+void sram_words(std::vector<uint8_t> &bytes, bool to_host)
+{
+	for (size_t i = 0; i + 1 < bytes.size(); i += 2)
+	{
+		uint16_t w;
+		if (to_host)
+		{
+			w = uint16_t(bytes[i] << 8 | bytes[i + 1]);
+			std::memcpy(&bytes[i], &w, 2);
+		}
+		else
+		{
+			std::memcpy(&w, &bytes[i], 2);
+			bytes[i] = uint8_t(w >> 8);
+			bytes[i + 1] = uint8_t(w);
+		}
+	}
+}
 
 // ---- the OSD --------------------------------------------------------------
 class chimera_osd final : public osd_interface
@@ -262,6 +305,16 @@ public:
 		// its emulator core, which otherwise paces the machine to the host's
 		// clock - sleeping between frames, and deciding by the host's time.
 		machine.video().set_throttled(false);
+	}
+	// MAME has read its nvram (nothing: nvram files are off) and set the clock;
+	// the machine is not reset yet, so the SRAM set here is what it powers on with
+	void ui_initialize(running_machine &machine) override
+	{
+		if (s_sram_in.empty()) return;
+		nvram_device *const nvram = machine.root_device().subdevice<nvram_device>("nvram");
+		auto file = util::ram_read(s_sram_in.data(), s_sram_in.size());
+		if (!nvram || !file || !nvram->nvram_load(*file))
+			throw emu_fatalerror("the SRAM could not be loaded");
 	}
 	~chimera_manager() override { delete m_ui; }
 private:
@@ -411,10 +464,37 @@ extern "C" uint8_t *x68k_ram(uint32_t *size)
 {
 	*size = 0;
 	if (!s_machine) return nullptr;
-	ram_device *ram = s_machine->device<ram_device>(RAM_TAG);
+	ram_device *ram = s_machine->root_device().subdevice<ram_device>(RAM_TAG);
 	if (!ram) return nullptr;
 	*size = ram->size();
 	return ram->pointer();
+}
+
+extern "C" int x68k_set_sram(const uint8_t *data, uint32_t size)
+{
+	if (size != kSramSize) return 1;
+	s_sram_in.assign(data, data + size);
+	// the signature's first word as the host keeps it: MAME's own nvram file
+	// starts that way ("\x77\x82" on a little-endian host)
+	uint16_t const signature = 0x8277;
+	uint8_t host[2];
+	std::memcpy(host, &signature, 2);
+	bool const host_order = host[0] != 0x82 && data[0] == host[0] && data[1] == host[1];
+	if (!host_order) sram_words(s_sram_in, true);
+	return 0;
+}
+
+extern "C" const uint8_t *x68k_sram(uint32_t *size)
+{
+	*size = 0;
+	nvram_device *const nvram = sram_device();
+	if (!nvram) return nullptr;
+	s_sram_out.clear();
+	util::vector_read_write_adapter<uint8_t> file(s_sram_out);
+	if (!nvram->nvram_save(file) || s_sram_out.size() != kSramSize) return nullptr;
+	sram_words(s_sram_out, false);
+	*size = kSramSize;
+	return s_sram_out.data();
 }
 
 // Every input field of the running machine, with its type and the input code
@@ -440,11 +520,12 @@ extern "C" void x68k_list_ports(void)
 }
 
 // The screen's refresh as the machine runs it now, in thousandths of a hertz:
-// 55.46 Hz in the 31 kHz modes, 61.46 Hz in the 15 kHz ones.
+// the CRTC's, so a program that changes mode changes it. 55.863 Hz in the
+// 768x512 mode the IPL-ROM boots in.
 extern "C" int x68k_refresh_millihertz(void)
 {
-	if (!s_machine) return 55458;
+	if (!s_machine) return 55863;
 	screen_device *const screen = screen_device_enumerator(s_machine->root_device()).first();
-	if (!screen) return 55458;
+	if (!screen) return 55863;
 	return int(screen->frame_period().as_hz() * 1000.0 + 0.5);
 }
