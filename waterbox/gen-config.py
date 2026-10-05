@@ -118,6 +118,74 @@ def binding(name):
     return ""
 
 
+# ---- what the controls and the system are called ----
+# The frontend keeps no table of these: a core says what its own are called.
+# MNEMONICS is the letter each button writes into a movie's text and heads its
+# input column with, by the button's name - whole, or without its player ("P2
+# Up" is found under "Up"), so one line serves every pad. AXIS_HEADERS is the
+# short header of each axis's column. (An entry is read by position: a letter
+# may change and no movie made before it is harmed.)
+MNEMONICS = {
+    "Up": "U", "Down": "D", "Left": "L", "Right": "R", "A": "A", "B": "B", "Start": "S",
+    "Select": "s", "Key ESC": "E", "Key 1": "1", "Key 2": "2", "Key 3": "3", "Key 4": "4",
+    "Key 5": "5", "Key 6": "6", "Key 7": "7", "Key 8": "8", "Key 9": "9", "Key 0": "0",
+    "Key -": "-", "Key ^": "^", "Key Yen": "Y", "Key BS": "B", "Key TAB": "T", "Key Q": "Q",
+    "Key W": "W", "Key E": "E", "Key R": "r", "Key T": "T", "Key Y": "Y", "Key U": "U",
+    "Key I": "I", "Key O": "O", "Key P": "P", "Key @": "@", "Key [": "[", "Key Enter": "E",
+    "Key A": "A", "Key S": "S", "Key D": "D", "Key F": "F", "Key G": "G", "Key H": "H",
+    "Key J": "J", "Key K": "K", "Key L": "l", "Key ;": ";", "Key :": ":", "Key ]": "]",
+    "Key Z": "Z", "Key X": "X", "Key C": "C", "Key V": "V", "Key B": "B", "Key N": "N",
+    "Key M": "M", "Key ,": ",", "Key .": "p", "Key /": "/", "Key _": "_", "Key Space": "S",
+    "Key HOME": "H", "Key DEL": "D", "Key ROLL UP": "U", "Key ROLL DOWN": "D", "Key UNDO": "U",
+    "Key Cursor Left": "L", "Key Cursor Up": "U", "Key Cursor Right": "R", "Key Cursor Down": "D",
+    "Key Tenkey CLR": "C", "Key Tenkey /": "/", "Key Tenkey *": "*", "Key Tenkey -": "-",
+    "Key Tenkey 7": "7", "Key Tenkey 8": "8", "Key Tenkey 9": "9", "Key Tenkey +": "+",
+    "Key Tenkey 4": "4", "Key Tenkey 5": "5", "Key Tenkey 6": "6", "Key Tenkey =": "=",
+    "Key Tenkey 1": "1", "Key Tenkey 2": "2", "Key Tenkey 3": "3", "Key Tenkey ENTER": "E",
+    "Key Tenkey 0": "0", "Key Tenkey ,": ",", "Key Tenkey .": "T", "Key Symbol input": "i",
+    "Key Register": "R", "Key Help": "H", "Key XF1": "X", "Key XF2": "X", "Key XF3": "X",
+    "Key XF4": "X", "Key XF5": "X", "Key Kana": "K", "Key Romaji": "R", "Key Code input": "i",
+    "Key CAPS": "C", "Key INS": "I", "Key Hiragana": "H", "Key Fullwidth": "F", "Key Break": "B",
+    "Key Copy": "C", "Key F1": "1", "Key F2": "2", "Key F3": "3", "Key F4": "4", "Key F5": "5",
+    "Key F6": "6", "Key F7": "7", "Key F8": "8", "Key F9": "9", "Key F10": "0", "Key SHIFT": "S",
+    "Key CTRL": "C", "Key OPT.1": "O", "Key OPT.2": "O", "Mouse Right": "r", "Mouse Left": "l",
+}
+AXIS_HEADERS = {
+    "Mouse X": "mX", "Mouse Y": "mY",
+}
+SYSTEM_NAMES = {
+    "X68000": "Sharp X68000",
+}
+
+
+def _bare(name):
+    """A control's name without its player: "P2 Up" -> "Up"."""
+    head, _, rest = name.partition(" ")
+    return rest if rest and head[:1] == "P" and head[1:].isdigit() else name
+
+
+def mnemonics_for(buttons):
+    """The "mnemonics" of an input declaration: a letter for every one of its
+    buttons, and for nothing else. A button nobody gave a letter stops the
+    build - the engine would give it its rule's guess, and two columns of one
+    pad would share a letter with nobody having decided it."""
+    out = {}
+    for b in buttons:
+        key = b if b in MNEMONICS else _bare(b)
+        if key not in MNEMONICS:
+            raise SystemExit("no mnemonic for the button %r (MNEMONICS in %s)" % (b, __file__))
+        out[key] = MNEMONICS[key]
+    return out
+
+
+def with_headers(axes):
+    """The axes with their column headers; an axis nobody named stops the build."""
+    missing = [a["name"] for a in axes if a["name"] not in AXIS_HEADERS]
+    if missing:
+        raise SystemExit("no header for the axes %s (AXIS_HEADERS in %s)" % (missing, __file__))
+    return [dict(a, header=AXIS_HEADERS[a["name"]]) for a in axes]
+
+
 def main():
     args = sys.argv[1:]
     firmware = os.path.join(ROOT, "tests", "roms-local")
@@ -156,6 +224,7 @@ def main():
     config = {
         "coreName": "MAME X68000",
         "systemId": "X68000",
+        "systemNames": SYSTEM_NAMES,
         "author": "The MAME team; chimera port by Sergio Martin",
         "url": "https://github.com/ToolAssisted-run/chimera-core-x68k",
         "romFile": "floppy",
@@ -208,10 +277,11 @@ def main():
                 "are the mouse's movement this frame, in pixels."
             ),
             "buttons": buttons,
-            "axes": [
+            "mnemonics": mnemonics_for(buttons),
+            "axes": with_headers([
                 {"name": "Mouse X", "min": -127, "max": 127, "neutral": 0},
                 {"name": "Mouse Y", "min": -127, "max": 127, "neutral": 0},
-            ],
+            ]),
         },
         "settings": [
             {
