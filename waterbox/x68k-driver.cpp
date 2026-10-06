@@ -201,6 +201,13 @@ public:
 				break;
 			}
 		}
+		// The picture is the screen's own pixels and nothing else: draw() sizes
+		// the target to them every frame. The view's shape, though, was fixed
+		// when it was made - from the 768x512 the machine boots in - and MAME
+		// keeps a view's shape by default, so a game that then chose 512x512
+		// was drawn 512x341 with black above and below, inside its own buffer
+		// where no display setting could reach it (chimera issue #209).
+		m_target->set_keepaspect(false);
 	}
 
 	void update(bool skip_redraw) override

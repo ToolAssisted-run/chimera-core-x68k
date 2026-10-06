@@ -213,6 +213,28 @@ nodisk="$(field "$(at "$work/nodisk.n" 3000)" vid)"
 check "the game boots from its floppy" "frame 3000: $title; negative control: no disk, $nodisk" \
 	[ "$title" = 512x512 -a "$nodisk" = 768x512 ]
 
+# the picture fills the buffer it comes in. The title's mode is not the one
+# the machine boots in, and MAME kept the boot mode's shape: the title was
+# drawn 512x341 with black above and below, inside its own 512x512 (chimera
+# issue #209). The first and the last row hold the sky; the same dump with
+# its top 86 rows blanked is the negative control.
+"$native" "$w" --frames 3000 --report 100000 --vid-out "$work/title.raw" > /dev/null 2>&1
+bands="$(python3 - "$work/title.raw" <<'PY'
+import sys
+f = open(sys.argv[1], "rb"); w, h = map(int, f.readline().split()); d = bytearray(f.read())
+def blank_rows(d):
+    black = lambda y: not any(d[y * w * 4 + i] for i in range(w * 4) if i % 4 != 3)
+    top = next((y for y in range(h) if not black(y)), h)
+    bottom = next((y for y in range(h) if not black(h - 1 - y)), h)
+    return top, bottom
+top, bottom = blank_rows(d)
+d[:86 * w * 4] = bytes(86 * w * 4)
+print("%dx%d top %d bottom %d control %d" % (w, h, top, bottom, blank_rows(d)[0]))
+PY
+)"
+check "the picture fills its buffer in a mode the machine did not boot in" "$bands" \
+	[ "$bands" = "512x512 top 0 bottom 0 control 86" ]
+
 # the input reaches the machine: each against the idle run, which the
 # determinism leg below shows is the same every time
 gamepic="$(field "$(at "$work/game.n" 3300)" vid)"
