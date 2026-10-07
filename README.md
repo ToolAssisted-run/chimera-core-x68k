@@ -66,7 +66,19 @@ with a blank SRAM and the IPL-ROM fills it in.
 
 The package carries no ROM and no disk.
 
+## Using it in Chimera
+
+Chimera ships no cores and downloads nothing. Download the `.chimeraCore`
+package from this repository's
+[Releases](https://github.com/ToolAssisted-run/chimera-core-x68k/releases)
+page, or build it, and put it in the `Cores` folder beside `Chimera.exe`.
+File > Core Manager lists it. The same file works on Linux and on Windows.
+
 ## Building
+
+[docs/BUILDING.md](docs/BUILDING.md) has the full instructions, as CI runs
+them, and [AGENTS.md](AGENTS.md) is the operating guide for an AI coding
+agent. In short:
 
 ```sh
 ./waterbox/checkout-mame.sh     # the part of MAME it builds, at the pinned commit
