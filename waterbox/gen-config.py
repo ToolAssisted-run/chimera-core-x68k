@@ -198,9 +198,10 @@ def main():
         "id": "cgrom.dat",
         "display": "Character generator ROM (cgrom.dat)",
         "description": (
-            "The X68000's 768 KB font ROM: the kanji, kana and ASCII glyphs every model "
-            "draws its text with. Sharp's, and yours to supply; the same file serves every "
-            "IPL-ROM."
+            "The X68000's font ROM (768 KB). It holds the kanji, kana and "
+            "ASCII characters that every model draws its text with. It is "
+            "Sharp's and you have to supply it. The same file is used with "
+            "every IPL-ROM."
         ),
         "name": "cgrom.dat",
         "size": 786432,
@@ -212,8 +213,8 @@ def main():
                 "id": name,
                 "display": f"{label} ({name})",
                 "description": (
-                    f"The {label} that the IPL-ROM setting \"{setting}\" boots, as MAME names "
-                    "the file. Sharp's, and yours to supply."
+                    f"The {label}. The IPL-ROM setting \"{setting}\" starts the machine from this "
+                    "file, which has the name MAME gives it. It is Sharp's and you have to supply it."
                 ),
                 "name": name,
                 "size": size,
@@ -305,9 +306,10 @@ def main():
                 "options": RAM_SIZES,
                 "default": "4M",
                 "description": (
-                    "The main memory, 1 to 12 MB. An X68000 shipped with 1 or 2 MB; MAME's "
-                    "default, and this core's, is 4 MB, which most software is happy with. Part "
-                    "of the machine: a movie needs the same size."
+                    "The main memory, from 1 to 12 MB. An X68000 was sold "
+                    "with 1 or 2 MB. MAME's default and this core's is 4 MB,"
+                    " which is enough for most software. It is part of the "
+                    "machine, so a movie needs the same size."
                 ),
             },
             {
@@ -316,10 +318,13 @@ def main():
                 "type": "string",
                 "default": "2000-01-01 00:00:00",
                 "description": (
-                    "The RP5C15 clock's date and time at power-on, as YYYY-MM-DD HH:MM:SS, from "
-                    "1980 to 2079. It runs with the machine from there, never with the host's "
-                    "clock. Human68k stamps files with it and some programs seed their random "
-                    "numbers from it, so it is part of the machine: a movie needs the same one."
+                    "The date and time of the machine's clock (the RP5C15 "
+                    "chip) at power-on, written as YYYY-MM-DD HH:MM:SS, from"
+                    " 1980 to 2079. From there it runs with the emulated "
+                    "machine and never with your computer's clock. The "
+                    "Human68k system stamps files with it and some programs "
+                    "pick their random numbers from it. It is part of the "
+                    "machine, so a movie needs the same value."
                 ),
             },
         ],
@@ -330,7 +335,9 @@ def main():
         f.write("\n")
 
     slots = {
-        "_comment": "An X68000 project is its floppies, and the SRAM it powers on with.",
+        "_comment": "This file lists the kinds of file an X68000 project can hold. "
+            "Chimera's New Project window is built from it. A project is its"
+            " floppy disks, and the SRAM it starts with.",
         "slots": [
             {
                 "id": "floppy",
@@ -339,10 +346,12 @@ def main():
                 "max": 2,
                 "formats": FLOPPY_FORMATS,
                 "help": (
-                    "The disks in drives 0 and 1, in that order: the first is the one the "
-                    "machine boots. The X68000's own images (.dim, .xdf/.hdm/.2hd) and the D88 "
-                    "family, or any of MAME's floppy containers (.mfm, .td0, .imd, .86f, .mfi, "
-                    "...). A game on more disks needs its first two here."
+                    "The disks in drives 0 and 1, in that order. The machine"
+                    " starts from the first one. Accepted are the X68000's "
+                    "own image formats (.dim, .xdf, .hdm, .2hd), the D88 "
+                    "family, and MAME's floppy formats (.mfm, .td0, .imd, "
+                    ".86f, .mfi and others). A game on more than two disks "
+                    "needs its first two here."
                 ),
             },
             {
@@ -352,12 +361,15 @@ def main():
                 "max": 1,
                 "formats": ["dat", "nv", "bin"],
                 "help": (
-                    "The 16 KB battery-backed SRAM the machine powers on with, as Export Save "
-                    "Data wrote it (SRAM.DAT): its settings - boot device, screen mode, memory "
-                    "switches - and whatever a program kept there. The machine's byte order, as "
-                    "a real X68000's reads; MAME's own nvram file is recognised and taken too. "
-                    "Without one the machine powers on with a blank SRAM, which the IPL-ROM "
-                    "fills in."
+                    "The machine's 16 KB of battery-backed memory (SRAM) as "
+                    "it is at power-on, in the file Export Save Data wrote "
+                    "(SRAM.DAT). It holds the machine's settings (start-up "
+                    "device, screen mode, memory switches) and anything a "
+                    "program stored there. The file is in the byte order a "
+                    "real X68000 reads. MAME's own nvram file is also "
+                    "recognised and accepted. With no file the machine "
+                    "starts with an empty SRAM, which the IPL-ROM then fills"
+                    " in."
                 ),
             },
         ],

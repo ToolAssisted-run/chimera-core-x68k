@@ -1,5 +1,5 @@
 {
-  "_comment": "An X68000 project is its floppies, and the SRAM it powers on with.",
+  "_comment": "This file lists the kinds of file an X68000 project can hold. Chimera's New Project window is built from it. A project is its floppy disks, and the SRAM it starts with.",
   "slots": [
     {
       "id": "floppy",
@@ -24,7 +24,7 @@
         "mfi",
         "dfi"
       ],
-      "help": "The disks in drives 0 and 1, in that order: the first is the one the machine boots. The X68000's own images (.dim, .xdf/.hdm/.2hd) and the D88 family, or any of MAME's floppy containers (.mfm, .td0, .imd, .86f, .mfi, ...). A game on more disks needs its first two here."
+      "help": "The disks in drives 0 and 1, in that order. The machine starts from the first one. Accepted are the X68000's own image formats (.dim, .xdf, .hdm, .2hd), the D88 family, and MAME's floppy formats (.mfm, .td0, .imd, .86f, .mfi and others). A game on more than two disks needs its first two here."
     },
     {
       "id": "savedata",
@@ -36,7 +36,7 @@
         "nv",
         "bin"
       ],
-      "help": "The 16 KB battery-backed SRAM the machine powers on with, as Export Save Data wrote it (SRAM.DAT): its settings - boot device, screen mode, memory switches - and whatever a program kept there. The machine's byte order, as a real X68000's reads; MAME's own nvram file is recognised and taken too. Without one the machine powers on with a blank SRAM, which the IPL-ROM fills in."
+      "help": "The machine's 16 KB of battery-backed memory (SRAM) as it is at power-on, in the file Export Save Data wrote (SRAM.DAT). It holds the machine's settings (start-up device, screen mode, memory switches) and anything a program stored there. The file is in the byte order a real X68000 reads. MAME's own nvram file is also recognised and accepted. With no file the machine starts with an empty SRAM, which the IPL-ROM then fills in."
     }
   ]
 }
