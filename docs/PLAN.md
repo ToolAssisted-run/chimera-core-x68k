@@ -92,6 +92,29 @@ RUN is named Start, because Chimera's column letter for "Run" is Right's.
 - A savestate is about 15.9 MB with 4 MB of RAM.
 - Native runs ~3.7 s per 900 frames of boot; the sandbox ~5.3 s.
 
+## A free machine in CI (chimera issue 260, user-decided 2026-10-14)
+
+A public runner may not hold Sharp's ROMs, so CI booted nothing. Sharp and
+four other rights holders released the four IPL-ROMs for free use in 2000,
+through the Sharp Products Users Forum; the X68000 LIBRARY distributes them
+with the licence text, which allows use on Sharp X machines and their
+emulators and redistribution free of charge only. The owner's decision: a
+test may use one, downloaded in CI and never kept in this repository or put
+in the package.
+
+`tests/free-rom/fetch.sh` downloads `X68BIOSE.LZH` (IPL-ROM 1.0, the X68000
+EXPERT's), refuses it unless its SHA-256 is the one `x68bios.ref` names, and
+unpacks it with `lhasa`. Its `IPLROM.DAT` is byte for byte the `iplrom.dat`
+MAME names. The font ROM was never released, so `make-cgrom.py` makes a
+stand-in: the Linux console's public-domain Fixed 8x16 font where the real
+ROM keeps its 8x16 half-width characters (0x3A800), the same shapes every
+other row for the 8x8 ones (0x3A000), and nothing else. MAME reports the
+wrong checksum and runs on. With no disk the IPL draws its "insert a disk"
+box with the disk-and-hand picture; the Japanese text in it is empty,
+because the stand-in has no kanji.
+
+Not covered: a disk, so nothing after the IPL; and any text drawn in kanji.
+
 ## Open
 
 - **More than two disks.** A game on three or four disks needs a disk swap

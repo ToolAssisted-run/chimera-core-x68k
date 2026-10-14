@@ -23,7 +23,7 @@ Commands run from the root of this repository unless a step says otherwise.
 
   ```sh
   sudo apt-get update
-  sudo apt-get install -y --no-install-recommends meson ninja-build build-essential cmake pkg-config python3 mono-complete xvfb libgl1-mesa-dev libegl-dev libx11-dev libxext-dev libasound2-dev
+  sudo apt-get install -y --no-install-recommends meson ninja-build build-essential cmake pkg-config python3 mono-complete xvfb libgl1-mesa-dev libegl-dev libx11-dev libxext-dev libasound2-dev lhasa console-setup-linux
   ```
 
 - The .NET SDK 8.0, for Chimera. The workflow uses `actions/setup-dotnet@v4`
@@ -295,8 +295,21 @@ WITHOUT those files (this is what CI runs), these legs run and nothing else:
   IPL-ROM option has its firmware, `cgrom.dat` is always required, the slots
   are `floppy` and `savedata`
 
-It then prints `SKIP every machine leg (ROM-less gate)` and stops. Nothing in
-CI boots the machine, compares native with sandbox, or loads a savestate.
+- with `X68K_FREE_ROMS`, a free machine: `tests/free-rom/fetch.sh <folder>`
+  downloads Sharp's free IPL-ROM 1.0 (released for free use in 2000, on
+  terms that allow it on emulators and free redistribution only) from the
+  X68000 LIBRARY, refuses it unless it is the file `x68bios.ref` names,
+  unpacks it with `lhasa`, and makes a stand-in for the font ROM - which
+  Sharp never released - from the Linux console's public-domain Fixed font
+  (`make-cgrom.py`). With no disk the IPL draws its "insert a disk" box. Five
+  legs: `free machine: the IPL draws its screen`, `native is deterministic`,
+  `native == sandbox`, `save+load around every frame changes nothing`, and
+  `the stream tells two machines apart` (the negative control: another
+  memory size). CI fetches the ROM and runs them. For the tests only: the ROM is
+  never kept in this repository and never put in the package.
+
+It then prints `SKIP every machine leg (ROM-less gate)` and stops. Apart
+from the free machine, nothing in CI boots the machine.
 
 WITH the three files, every leg after that runs. They prove:
 

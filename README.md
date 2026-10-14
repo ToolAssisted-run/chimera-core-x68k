@@ -96,7 +96,9 @@ too. The guest build needs miniBox's C++ guest toolchain
 
 The gate's machine legs need `cgrom.dat`, `iplrom.dat` and Dog Fight! as
 `dogfight.dim` in `tests/roms-local` (or `X68K_ROMS`). Without them it builds,
-packages, checks the declarations, and says it skipped every machine leg.
+packages, checks the declarations, and says it skipped every machine leg -
+except on a free machine: Sharp's freely released IPL-ROM with a stand-in
+font, which CI downloads (`tests/free-rom`, `X68K_FREE_ROMS`).
 
 ## Licence
 

@@ -20,6 +20,10 @@
 # the gate is ROM-LESS: it builds, packages and checks the declarations, and
 # says - visibly - which legs it skipped.
 #
+# One machine needs none of that: X68K_FREE_ROMS names a folder
+# tests/free-rom/fetch.sh wrote (Sharp's free IPL-ROM 1.0 and a stand-in font
+# ROM), and five legs run the machine on it. That is what CI runs.
+#
 # Usage: ./run-gate.sh [-r <chimera root>] [-m <minibox dir>]
 set -eu
 here="$(cd "$(dirname "$0")" && pwd)"
@@ -128,6 +132,62 @@ if [ "$ok" = 1 ]; then
 	report PASS "the declarations hold together" "$(cat "$work/decl.log")"
 else
 	report FAIL "the declarations hold together" "$(tail -1 "$work/decl.log")"
+fi
+
+# ------------------------------------------------- 1b. a free machine
+# A public CI runner may not hold Sharp's ROMs. Sharp released the IPL-ROMs
+# for free use in 2000 (not the font ROM), and the owner decided (2026-10-14)
+# that a test may use version 1.0, downloaded in CI and never kept here or put
+# in the package (chimera issue 260). tests/free-rom/fetch.sh gets it, checks
+# it, and makes a stand-in font ROM from a public-domain console font. With no
+# disk the IPL draws its "insert a disk" box; the Japanese text in it stays
+# empty, because the stand-in has no kanji.
+#   X68K_FREE_ROMS   a folder fetch.sh wrote (iplrom.dat, cgrom.dat)
+free="${X68K_FREE_ROMS:-}"
+if [ -z "$free" ] || [ ! -f "$free/iplrom.dat" ] || [ ! -f "$free/cgrom.dat" ]; then
+	report SKIP "free machine: every leg (five)" "needs X68K_FREE_ROMS, a folder tests/free-rom/fetch.sh wrote"
+else
+	freework() { # <dir> [memory]
+		rm -rf "$1"; mkdir -p "$1"
+		cp "$free/iplrom.dat" "$free/cgrom.dat" "$1/"
+		printf '{}' > "$1/slots"
+		printf '{"ipl_rom":"ipl10","ram":"%s","clock":"2000-01-01 00:00:00"}' "${2:-4M}" > "$1/settings"
+	}
+	fw="$work/free"; freework "$fw"
+	# the negative control: another amount of memory, which the IPL counts
+	# (another clock does not do: with no disk the IPL never reads it)
+	fwc="$work/free-ram"; freework "$fwc" 2M
+	"$native" "$fw" --frames 600 --report 10 > "$work/free.n" 2>/dev/null &
+	"$native" "$fw" --frames 600 --report 10 > "$work/free.n2" 2>/dev/null &
+	"$native" "$fwc" --frames 600 --report 10 > "$work/free.nc" 2>/dev/null &
+	"$wbxrun" "$core" "$fw" --frames 600 --report 10 > "$work/free.w" 2>/dev/null &
+	"$wbxrun" "$core" "$fw" --frames 300 --report 10 > "$work/free.ws" 2>/dev/null &
+	"$wbxrun" "$core" "$fw" --frames 300 --report 10 --rerecord > "$work/free.wr" 2>/dev/null &
+	"$native" "$fw" --frames 121 --report 1000 --vid-out "$work/free-120.raw" > /dev/null 2>&1 &
+	"$native" "$fw" --frames 600 --report 1000 --vid-out "$work/free-599.raw" > /dev/null 2>&1 &
+	wait
+	stream "$work/free.n" > "$work/free.n.s"; stream "$work/free.n2" > "$work/free.n2.s"
+	stream "$work/free.nc" > "$work/free.nc.s"; stream "$work/free.w" > "$work/free.w.s"
+	stream "$work/free.ws" > "$work/free.ws.s"; stream "$work/free.wr" > "$work/free.wr.s"
+	lit="$(python3 - "$work/free-120.raw" "$work/free-599.raw" <<'PY'
+import sys
+def pic(path):
+    d = open(path, "rb").read()
+    return d[d.index(b"\n") + 1:]
+a, b = pic(sys.argv[1]), pic(sys.argv[2])
+lit = sum(1 for i in range(0, len(b), 4) if b[i] | b[i + 1] | b[i + 2])
+print(lit if a != b else 0)
+PY
+)"
+	if [ "${lit:-0}" -gt 1000 ]; then
+		report PASS "free machine: the IPL draws its screen" "$lit lit pixels at frame 599, and not the picture of frame 120"
+	else
+		report FAIL "free machine: the IPL draws its screen" "${lit:-0} lit pixels (0 also when frames 120 and 599 are the same picture)"
+	fi
+	check "free machine: native is deterministic" "600 frames, twice" same "$work/free.n.s" "$work/free.n2.s"
+	check "free machine: native == sandbox" "600 frames, every 10th frame's digests" same "$work/free.n.s" "$work/free.w.s"
+	check "free machine: save+load around every frame changes nothing" "300 frames in the sandbox" same "$work/free.ws.s" "$work/free.wr.s"
+	check "free machine: the stream tells two machines apart" "negative control: 2 MB of memory instead of 4" differ "$work/free.n.s" "$work/free.nc.s"
 fi
 
 if [ ! -f "$roms/cgrom.dat" ] || [ ! -f "$roms/iplrom.dat" ] || [ ! -f "$roms/dogfight.dim" ]; then

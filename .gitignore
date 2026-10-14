@@ -1,3 +1,4 @@
 tests/roms-local/
 build/
 waterbox/bin/
+/free-rom/

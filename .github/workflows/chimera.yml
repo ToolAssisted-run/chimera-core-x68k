@@ -63,7 +63,7 @@ jobs:
       - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends meson ninja-build build-essential cmake pkg-config python3 mono-complete xvfb libgl1-mesa-dev libegl-dev libx11-dev libxext-dev libasound2-dev
+          sudo apt-get install -y --no-install-recommends meson ninja-build build-essential cmake pkg-config python3 mono-complete xvfb libgl1-mesa-dev libegl-dev libx11-dev libxext-dev libasound2-dev lhasa console-setup-linux
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
@@ -97,6 +97,15 @@ jobs:
           [ -f "$mb/build/meson-cpp/build.ninja" ] || meson setup "$mb/build/meson-cpp" "$mb" -Dguest_cpp=true
           meson compile -C "$mb/build/meson-cpp"
 
+      - name: Fetch Sharp's free IPL-ROM for the gate's free machine
+        # Sharp released the IPL-ROMs for free use in 2000; the owner decided
+        # (2026-10-14) that a test may use version 1.0, downloaded here and
+        # never kept in the repository or put in the package (chimera issue
+        # 260). fetch.sh checks it against tests/free-rom/x68bios.ref and makes a
+        # stand-in for the font ROM, which was never released, from the
+        # console's public-domain Fixed font (console-setup-linux).
+        run: sh tests/free-rom/fetch.sh "$PWD/free-rom"
+
       - name: Core gate (builds MAME twice and the package)
         # The commit is the core's authoritative version: this build is the one
         # that publishes the artifact, so what it stamps is what a movie can
@@ -105,6 +114,7 @@ jobs:
           CORE_VERSION: ${{ github.sha }}
           CHIMERA_ROOT: ${{ github.workspace }}/chimera-checkout
           MINIBOX_DIR: ${{ github.workspace }}/chimera-checkout/extern/chimera-common-minibox
+          X68K_FREE_ROMS: ${{ github.workspace }}/free-rom
         run: ./waterbox/run-gate.sh
 
       - name: Install the package into the Chimera checkout
