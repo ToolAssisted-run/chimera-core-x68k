@@ -77,10 +77,10 @@ for f in range(1, 11):
 # the first joystick on the host's arrows and Z/X as well as the first pad, as
 # the DOSBox core does; the second on the second pad
 PADS = {
-    "Up": ("Up", "POV1U", "DpadUp, X{n} LStickUp"),
-    "Down": ("Down", "POV1D", "DpadDown, X{n} LStickDown"),
-    "Left": ("Left", "POV1L", "DpadLeft, X{n} LStickLeft"),
-    "Right": ("Right", "POV1R", "DpadRight, X{n} LStickRight"),
+    "Up": ("Up", "POV0U", "DpadUp, X{n} LStickUp"),
+    "Down": ("Down", "POV0D", "DpadDown, X{n} LStickDown"),
+    "Left": ("Left", "POV0L", "DpadLeft, X{n} LStickLeft"),
+    "Right": ("Right", "POV0R", "DpadRight, X{n} LStickRight"),
     "A": ("Z", "B1", "A"),
     "B": ("X", "B2", "B"),
     "Start": ("", "B8", "Start"),
