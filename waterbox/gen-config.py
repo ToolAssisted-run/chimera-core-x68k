@@ -149,6 +149,8 @@ MNEMONICS = {
     "Key Copy": "C", "Key F1": "1", "Key F2": "2", "Key F3": "3", "Key F4": "4", "Key F5": "5",
     "Key F6": "6", "Key F7": "7", "Key F8": "8", "Key F9": "9", "Key F10": "0", "Key SHIFT": "S",
     "Key CTRL": "C", "Key OPT.1": "O", "Key OPT.2": "O", "Mouse Right": "r", "Mouse Left": "l",
+    "Drive 0 Previous Disk": "{", "Drive 0 Next Disk": "}", "Drive 0 Eject Disk": "~",
+    "Drive 1 Previous Disk": "<", "Drive 1 Next Disk": ">", "Drive 1 Eject Disk": "!",
 }
 AXIS_HEADERS = {
     "Mouse X": "mX", "Mouse Y": "mY",
@@ -273,7 +275,9 @@ def main():
                 "The machine's own controls, in the order MAME's X68000 declares them: the two "
                 "joystick ports (FM Towns pads: the four directions, A, B, RUN - named Start, "
                 "which it is - and Select), the "
-                "keyboard key by key, the mouse's two buttons. Generated from the core "
+                "keyboard key by key, the mouse's two buttons. Then the core's own: each drive's "
+                "Previous Disk, Next Disk and Eject Disk, which put another of the project's "
+                "floppies in that drive, or none, at the start of the frame they are pressed for. Generated from the core "
                 "(gen-config.py); wider than 64, so every button rides SetButton. The axes "
                 "are the mouse's movement this frame, in pixels."
             ),
@@ -337,21 +341,42 @@ def main():
     slots = {
         "_comment": "This file lists the kinds of file an X68000 project can hold. "
             "Chimera's New Project window is built from it. A project is its"
-            " floppy disks, and the SRAM it starts with.",
+            " floppy disks, a hard disk if it has one, and the SRAM it starts with.",
         "slots": [
             {
                 "id": "floppy",
                 "title": "Floppy disks",
-                "min": 1,
-                "max": 2,
+                "min": 0,
+                "max": -1,
                 "formats": FLOPPY_FORMATS,
                 "help": (
-                    "The disks in drives 0 and 1, in that order. The machine"
-                    " starts from the first one. Accepted are the X68000's "
-                    "own image formats (.dim, .xdf, .hdm, .2hd), the D88 "
-                    "family, and MAME's floppy formats (.mfm, .td0, .imd, "
-                    ".86f, .mfi and others). A game on more than two disks "
-                    "needs its first two here."
+                    "The game's disks, as many as it has. The first is in "
+                    "drive 0 and the second in drive 1 when the machine "
+                    "starts, and the machine starts from the first. Each "
+                    "drive's Previous Disk and Next Disk controls go through "
+                    "this list in its order, passing over the disk in the "
+                    "other drive, and Eject Disk empties the drive. What a "
+                    "program writes to a disk stays with it for the session, "
+                    "also after it comes out, and your files are never "
+                    "changed. Accepted are the X68000's own image formats "
+                    "(.dim, .xdf, .hdm, .2hd), the D88 family, and MAME's "
+                    "floppy formats (.mfm, .td0, .imd, .86f, .mfi and others)."
+                ),
+            },
+            {
+                "id": "hdd",
+                "title": "Hard disk",
+                "min": 0,
+                "max": 1,
+                "formats": ["hdf"],
+                "help": (
+                    "A SASI hard disk image (.hdf), as X68000 emulators make "
+                    "them, on the original X68000's hard disk port. The core "
+                    "works on a copy in memory: what is "
+                    "written stays for the session, is part of savestates, "
+                    "and Export Save Data writes the disk as it is then, "
+                    "under its own name, which can be given here to go on "
+                    "from it. Your file is never changed."
                 ),
             },
             {

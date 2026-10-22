@@ -120,6 +120,67 @@ void bind_panel(running_machine &machine)
 			slot++;
 		}
 	}
+	// the core's own controls, after the machine's: each drive's Previous
+	// Disk, Next Disk and Eject Disk (see "disks" below)
+	static const char *const kinds[] = { "Previous Disk", "Next Disk", "Eject Disk" };
+	for (int d = 0; d < 2; d++)
+		for (int k = 0; k < 3; k++)
+			s_panel.push_back({ "Drive " + std::to_string(d) + " " + kinds[k], -1 - (d * 3 + k) });
+}
+
+// ---- disks ---------------------------------------------------------------
+// The project's floppies are one list. Drive 0 starts with the first disk and
+// drive 1 with the second. A drive's Next Disk and Previous Disk put the next
+// or the previous disk of the list in (round the end), passing over the one
+// in the other drive, and its Eject Disk leaves it empty. A control acts when
+// it goes down, at the start of the frame it is pressed for. A disk keeps what a
+// program wrote to it when it comes out (patch 0005), all of it in the
+// machine's memory, so a savestate holds it (patch 0004).
+constexpr int kDrives = 2;
+std::vector<std::string> s_disks;     // the project's disks, in order
+int s_disk_at[kDrives] = { 0, 1 };    // the disk each drive last took
+int s_disk_pending[kDrives];          // 1 previous, 2 next, 3 eject: done at the frame's start
+bool s_disk_held[kDrives * 3];        // the six controls as they were last set
+
+running_machine *s_disk_machine;
+
+void do_disk_actions()
+{
+	if (!s_disk_machine) return;
+	std::vector<device_image_interface *> drives;
+	for (device_image_interface &image : image_interface_enumerator(s_disk_machine->root_device()))
+		if (!std::strcmp(image.image_type_name(), "floppydisk") && drives.size() < size_t(kDrives))
+			drives.push_back(&image);
+	int const n = int(s_disks.size());
+	for (int d = 0; d < int(drives.size()); d++)
+	{
+		int const action = s_disk_pending[d];
+		s_disk_pending[d] = 0;
+		if (!action || n == 0) continue;
+		device_image_interface &drive = *drives[d];
+		if (action == 3)
+		{
+			drive.unload();
+			continue;
+		}
+		// whether a drive holds a disk is MAME's to say: the X68000 ejects one
+		// itself, the IPL-ROM a disk it cannot start from
+		int const other = d ^ 1;
+		bool const other_full = other < int(drives.size()) && drives[other]->exists();
+		int at = s_disk_at[d];
+		for (int tries = 0; tries < n; tries++)
+		{
+			at = (at + (action == 2 ? 1 : n - 1)) % n;
+			if (other_full && s_disk_at[other] == at) continue;
+			if (at == s_disk_at[d] && drive.exists()) break;   // its own disk is the only other one
+			drive.unload();
+			auto const result = drive.load(s_disks[at]);
+			s_disk_at[d] = at;
+			if (result.first)
+				std::fprintf(stderr, "the disk %s could not be put in drive %d: %s\n", s_disks[at].c_str(), d, result.second.c_str());
+			break;
+		}
+	}
 }
 
 // ---- what one frame leaves behind ---------------------------------------
@@ -218,6 +279,9 @@ public:
 		if (!skip_redraw) draw();
 		// the end of a frame: back to x68k_frame's caller
 		co_switch(s_host);
+		// the start of the next: a disk control pressed for it
+		s_disk_machine = m_machine;
+		do_disk_actions();
 	}
 
 	void input_update(bool relative_reset) override { }
@@ -450,7 +514,52 @@ extern "C" int x68k_sample_rate(void) { return kSampleRate; }
 extern "C" void x68k_set_button(int index, int pressed)
 {
 	if (index < 0 || index >= int(s_panel.size())) return;
+	if (s_panel[index].slot < 0)
+	{
+		// a disk control acts when it goes down
+		int const c = -1 - s_panel[index].slot;
+		if (pressed && !s_disk_held[c]) s_disk_pending[c / 3] = c % 3 + 1;
+		s_disk_held[c] = pressed != 0;
+		return;
+	}
 	s_slot[s_panel[index].slot] = pressed ? 1 : 0;
+}
+
+extern "C" void x68k_add_disk(const char *name)
+{
+	s_disks.push_back(name);
+}
+
+extern "C" const char *x68k_drive_disk(int drive)
+{
+	if (!s_machine) return "-";
+	int d = 0;
+	for (device_image_interface &image : image_interface_enumerator(s_machine->root_device()))
+		if (!std::strcmp(image.image_type_name(), "floppydisk") && d++ == drive)
+			return image.exists() ? image.basename() : "-";
+	return "-";
+}
+
+extern "C" const uint8_t *x68k_hard_disk(uint32_t *size)
+{
+	static std::vector<uint8_t> bytes;
+	*size = 0;
+	if (!s_machine) return nullptr;
+	for (device_image_interface &image : image_interface_enumerator(s_machine->root_device()))
+	{
+		if (std::strcmp(image.image_type_name(), "sasihd") || !image.exists()) continue;
+		// read through the device's own file - the copy in memory every write
+		// went to (patch 0004) - and put its place back where it was: a
+		// transfer can be part way through
+		uint64_t const was = image.ftell();
+		bytes.resize(size_t(image.length()));
+		image.fseek(0, SEEK_SET);
+		bytes.resize(image.fread(bytes.data(), uint32_t(bytes.size())));
+		image.fseek(was, SEEK_SET);
+		*size = uint32_t(bytes.size());
+		return bytes.data();
+	}
+	return nullptr;
 }
 
 extern "C" void x68k_set_axis(int index, int value)

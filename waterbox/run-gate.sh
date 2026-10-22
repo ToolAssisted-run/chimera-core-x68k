@@ -22,7 +22,7 @@
 #
 # One machine needs none of that: X68K_FREE_ROMS names a folder
 # tests/free-rom/fetch.sh wrote (Sharp's free IPL-ROM 1.0 and a stand-in font
-# ROM), and five legs run the machine on it. That is what CI runs.
+# ROM), and ten legs run the machine on it. That is what CI runs.
 #
 # Usage: ./run-gate.sh [-r <chimera root>] [-m <minibox dir>]
 set -eu
@@ -125,7 +125,7 @@ for option in ipl["options"]:
     assert any(f.get("requiredWhen", {}).get("is") == option for f in cfg["firmware"]), f"no firmware for {option}"
 assert any(f["id"] == "cgrom.dat" and "requiredWhen" not in f for f in cfg["firmware"])
 ids = [s["id"] for s in slots["slots"]]
-assert ids == ["floppy", "savedata"] and cfg["romFile"] == "floppy", ids
+assert ids == ["floppy", "hdd", "savedata"] and cfg["romFile"] == "floppy", ids
 print(f"{len(buttons)} controls, {len(axes)} axes, {len(cfg['firmware'])} firmware files")
 PY
 if [ "$ok" = 1 ]; then
@@ -145,7 +145,7 @@ fi
 #   X68K_FREE_ROMS   a folder fetch.sh wrote (iplrom.dat, cgrom.dat)
 free="${X68K_FREE_ROMS:-}"
 if [ -z "$free" ] || [ ! -f "$free/iplrom.dat" ] || [ ! -f "$free/cgrom.dat" ]; then
-	report SKIP "free machine: every leg (five)" "needs X68K_FREE_ROMS, a folder tests/free-rom/fetch.sh wrote"
+	report SKIP "free machine: every leg (ten)" "needs X68K_FREE_ROMS, a folder tests/free-rom/fetch.sh wrote"
 else
 	freework() { # <dir> [memory]
 		rm -rf "$1"; mkdir -p "$1"
@@ -188,6 +188,61 @@ PY
 	check "free machine: native == sandbox" "600 frames, every 10th frame's digests" same "$work/free.n.s" "$work/free.w.s"
 	check "free machine: save+load around every frame changes nothing" "300 frames in the sandbox" same "$work/free.ws.s" "$work/free.wr.s"
 	check "free machine: the stream tells two machines apart" "negative control: 2 MB of memory instead of 4" differ "$work/free.n.s" "$work/free.nc.s"
+
+	# The disk controls (chimera issues 352 and 351), on three blank disks of
+	# the test's own: each drive's Next and Previous Disk go through the
+	# project's list passing over the other drive's disk, Eject empties it, and
+	# what the drives hold is said frame by frame by the native runner
+	# (X68K_DRIVES). A control acts at the start of the frame it is pressed for.
+	dw="$work/free-disks"; freework "$dw"
+	for d in a b c; do
+		python3 -c "import sys; open(sys.argv[1], 'wb').write(bytes([ord(sys.argv[2])]) * 1261568)" "$dw/$d.xdf" "$d"
+	done
+	printf '{"floppy":["a.xdf","b.xdf","c.xdf"]}' > "$dw/slots"
+	"$native" "$dw" --frames 1 --list-panel > "$work/free-disks.panel" 2>/dev/null || true
+	idx() { awk -v n="$1" '$1=="panel" { s=$0; sub(/^panel [0-9]+ \x27/, "", s); sub(/\x27 (active|-)$/, "", s); if (s==n) print $2 }' "$work/free-disks.panel"; }
+	d0p="$(idx 'Drive 0 Previous Disk')"; d0n="$(idx 'Drive 0 Next Disk')"; d0e="$(idx 'Drive 0 Eject Disk')"
+	d1p="$(idx 'Drive 1 Previous Disk')"; d1n="$(idx 'Drive 1 Next Disk')"
+	if [ -z "$d0p" ] || [ -z "$d0n" ] || [ -z "$d0e" ] || [ -z "$d1p" ] || [ -z "$d1n" ]; then
+		report FAIL "free machine: the disk controls are on the panel" "not every Drive 0/1 Previous/Next/Eject Disk is listed"
+	else
+		presses="--press $d0n:10:1 --press $d1n:20:1 --press $d0e:30:1 --press $d0p:40:1 --press $d1p:50:1"
+		X68K_DRIVES=1 "$native" "$dw" --frames 60 --report 10 $presses > "$work/free-disks.n" 2>/dev/null || true
+		got="$(awk '$1=="drives" && ($2==1 || $2==11 || $2==21 || $2==31 || $2==41 || $2==51) { printf "%s:%s/%s ", $2, $3, $4 }' "$work/free-disks.n")"
+		want="1:a.xdf/b.xdf 11:c.xdf/b.xdf 21:c.xdf/a.xdf 31:-/a.xdf 41:b.xdf/a.xdf 51:b.xdf/c.xdf "
+		if [ "$got" = "$want" ]; then
+			report PASS "free machine: the disk controls go through the disks" "$got"
+		else
+			report FAIL "free machine: the disk controls go through the disks" "got $got; want $want"
+		fi
+		# the same presses in the sandbox, straight and with a save and load
+		# around every frame; and without the presses, which must differ
+		"$wbxrun" "$core" "$dw" --frames 300 --report 10 $presses > "$work/free-disks.w" 2>/dev/null &
+		"$wbxrun" "$core" "$dw" --frames 300 --report 10 $presses --rerecord > "$work/free-disks.wr" 2>/dev/null &
+		"$native" "$dw" --frames 300 --report 10 $presses > "$work/free-disks.n3" 2>/dev/null &
+		"$native" "$dw" --frames 300 --report 10 > "$work/free-disks.idle" 2>/dev/null &
+		wait
+		stream "$work/free-disks.w" > "$work/free-disks.w.s"; stream "$work/free-disks.wr" > "$work/free-disks.wr.s"
+		stream "$work/free-disks.n3" > "$work/free-disks.n3.s"; stream "$work/free-disks.idle" > "$work/free-disks.idle.s"
+		check "free machine: disk swaps, native == sandbox" "300 frames, every 10th frame's digests" same "$work/free-disks.n3.s" "$work/free-disks.w.s"
+		check "free machine: disk swaps survive a save and load every frame" "300 frames in the sandbox" same "$work/free-disks.w.s" "$work/free-disks.wr.s"
+		check "free machine: the disk controls reach the machine" "negative control: the same disks with no control pressed" differ "$work/free-disks.n3.s" "$work/free-disks.idle.s"
+	fi
+
+	# a hard disk (issue 351): a blank SASI image of MAME's own size goes in,
+	# and Export Save Data hands it back, under its name, unchanged
+	hw="$work/free-hdd"; freework "$hw"
+	python3 -c "import sys; open(sys.argv[1], 'wb').write(bytes(256 * 0x13c98))" "$hw/blank.hdf"
+	printf '{"hdd":["blank.hdf"]}' > "$hw/slots"
+	mkdir -p "$work/free-hdd.out" "$work/free-nohdd.out"
+	"$native" "$hw" --frames 120 --report 120 --savedata-out "$work/free-hdd.out" > "$work/free-hdd.n" 2>&1 || true
+	"$native" "$fw" --frames 120 --report 120 --savedata-out "$work/free-nohdd.out" > /dev/null 2>&1 || true
+	if cmp -s "$hw/blank.hdf" "$work/free-hdd.out/blank.hdf" && [ -f "$work/free-hdd.out/SRAM.DAT" ] && \
+		[ -f "$work/free-nohdd.out/SRAM.DAT" ] && [ "$(ls "$work/free-nohdd.out" | wc -l)" -eq 1 ]; then
+		report PASS "free machine: a hard disk goes out as save data" "blank.hdf back unchanged beside SRAM.DAT; without one, SRAM.DAT alone"
+	else
+		report FAIL "free machine: a hard disk goes out as save data" "with: $(ls "$work/free-hdd.out" 2>/dev/null | tr '\n' ' ')- without: $(ls "$work/free-nohdd.out" 2>/dev/null | tr '\n' ' ')"
+	fi
 fi
 
 if [ ! -f "$roms/cgrom.dat" ] || [ ! -f "$roms/iplrom.dat" ] || [ ! -f "$roms/dogfight.dim" ]; then

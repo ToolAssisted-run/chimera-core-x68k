@@ -11,6 +11,7 @@
  */
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "gate-harness.h"
@@ -59,6 +60,16 @@ static const int16_t *audio(int *n)
 }
 static const uint8_t *domain_ptr(int i) { return GetMemoryDomainPtr(i); }
 
+/* X68K_DRIVES set: what each floppy drive holds at the start of every frame,
+ * for the gate's disk-control legs */
+extern const char *x68k_drive_disk(int drive);
+static long s_drives_frame;
+static void print_drives(void)
+{
+	s_drives_frame++;
+	printf("drives %ld %s %s\n", s_drives_frame, x68k_drive_disk(0), x68k_drive_disk(1));
+}
+
 int main(int argc, char **argv)
 {
 	if (argc < 2)
@@ -93,7 +104,7 @@ int main(int argc, char **argv)
 		.domain_name = GetMemoryDomainName,
 		.domain_ptr = domain_ptr,
 		.domain_size = GetMemoryDomainSize,
-		.pre_frame = NULL,
+		.pre_frame = getenv("X68K_DRIVES") ? print_drives : NULL,
 		.save_count = save_count,
 		.save_name = save_name,
 		.save_size = save_size,

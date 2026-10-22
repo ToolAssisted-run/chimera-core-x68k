@@ -20,6 +20,8 @@
 #include "x68k-driver.h"
 
 static char g_loadError[1024];
+/* the Hard disk slot's file, or empty: the name its exported copy goes by */
+static char g_hddName[512];
 
 static bool Exists(const char *name)
 {
@@ -113,12 +115,15 @@ ECL_EXPORT int Init(void)
 		}
 	}
 
-	/* the floppies: the Floppy disks slot's files, in the drives in order */
+	/* the floppies: the Floppy disks slot's files, the first two in drives 0
+	 * and 1, and all of them in the list the drives' disk controls go through */
 	char entry[512];
 	const int32_t disks = wbx_slot_count("floppy");
-	for (int32_t i = 0; i < disks && i < 2; i++)
+	for (int32_t i = 0; i < disks; i++)
 	{
 		if (wbx_slot_name("floppy", i, entry, sizeof entry) == nullptr) continue;
+		x68k_add_disk(entry);
+		if (i >= 2) continue;
 		char opt[8];
 		snprintf(opt, sizeof opt, "flop%d", int(i + 1));
 		x68k_set_option(opt, entry);
@@ -134,7 +139,16 @@ ECL_EXPORT int Init(void)
 			fclose(f);
 			entry[got] = '\0';
 			x68k_set_option("flop1", entry);
+			x68k_add_disk(entry);
 		}
+	}
+
+	/* the SASI hard disk: the Hard disk slot's file. MAME works on a copy in
+	 * memory (patch 0004), so the file is never changed */
+	if (wbx_slot_count("hdd") > 0 && wbx_slot_name("hdd", 0, entry, sizeof entry) != nullptr)
+	{
+		x68k_set_option("sasi", entry);
+		snprintf(g_hddName, sizeof g_hddName, "%s", entry);
 	}
 
 	/* the SRAM the machine powers on with: the Save data slot's file */
@@ -223,24 +237,39 @@ ECL_EXPORT int GetVsyncDenominator(void) { return 1000; }
 ECL_EXPORT const char *DescribeDips(void) { return ""; }
 
 /* The save data is the SRAM, one file in the machine's byte order - the form
- * the Save data slot takes back. What a program writes to its floppy stays on
- * the floppy. */
+ * the Save data slot takes back - and, with a hard disk, the hard disk as it
+ * is now, under its own name, which the Hard disk slot takes back. What a
+ * program writes to a floppy stays with that floppy for the session. */
 ECL_EXPORT int32_t GetSaveDataFileCount(void)
 {
 	uint32_t size;
-	return x68k_sram(&size) ? 1 : 0;
+	int32_t n = x68k_sram(&size) ? 1 : 0;
+	if (g_hddName[0] && x68k_hard_disk(&size)) n++;
+	return n;
 }
-ECL_EXPORT const char *GetSaveDataFileName(int32_t i) { return i == 0 ? "SRAM.DAT" : ""; }
+ECL_EXPORT const char *GetSaveDataFileName(int32_t i)
+{
+	uint32_t size;
+	const bool sram = x68k_sram(&size) != nullptr;
+	if (sram && i == 0) return "SRAM.DAT";
+	if (g_hddName[0] && i == (sram ? 1 : 0)) return g_hddName;
+	return "";
+}
 ECL_EXPORT int64_t GetSaveDataFileSize(int32_t i)
 {
 	uint32_t size = 0;
-	if (i == 0) x68k_sram(&size);
-	return size;
+	const bool sram = x68k_sram(&size) != nullptr;
+	if (sram && i == 0) return size;
+	if (g_hddName[0] && i == (sram ? 1 : 0) && x68k_hard_disk(&size)) return size;
+	return 0;
 }
 ECL_EXPORT const uint8_t *GetSaveDataFileBuffer(int32_t i)
 {
 	uint32_t size;
-	return i == 0 ? x68k_sram(&size) : nullptr;
+	const uint8_t *sram = x68k_sram(&size);
+	if (sram && i == 0) return sram;
+	if (g_hddName[0] && i == (sram ? 1 : 0)) return x68k_hard_disk(&size);
+	return nullptr;
 }
 
 ECL_EXPORT int GetMemoryDomainCount(void) { return 1; }

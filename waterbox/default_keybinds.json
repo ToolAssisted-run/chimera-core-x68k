@@ -134,7 +134,13 @@
    "Key OPT.1": "F11",
    "Key OPT.2": "F12",
    "Mouse Right": "WMouse R",
-   "Mouse Left": "WMouse L"
+   "Mouse Left": "WMouse L",
+   "Drive 0 Previous Disk": "",
+   "Drive 0 Next Disk": "",
+   "Drive 0 Eject Disk": "",
+   "Drive 1 Previous Disk": "",
+   "Drive 1 Next Disk": "",
+   "Drive 1 Eject Disk": ""
   }
  },
  "AllTrollersAutoFire": {

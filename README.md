@@ -22,7 +22,11 @@ X68000 declares its inputs:
 - **the keyboard**, all 112 keys by their X68000 legends (`Key ROLL UP`,
   `Key XF1`, `Key OPT.1`, `Key Tenkey 5`, ...);
 - **the mouse**: its two buttons, and Mouse X / Mouse Y, the movement this
-  frame in pixels.
+  frame in pixels;
+- **the disk controls**, the core's own: `Drive 0 Previous Disk`,
+  `Drive 0 Next Disk`, `Drive 0 Eject Disk` and the same for drive 1. They
+  put another of the project's floppies in that drive, or none, at the start
+  of the frame they are pressed for. They are not bound by default.
 
 The panel is read from the running machine (`waterbox/gen-config.py`) and the
 gate checks the package still declares the one the core binds. By default the
@@ -59,10 +63,16 @@ with a blank SRAM and the IPL-ROM fills it in.
 
 - **Firmware**: `cgrom.dat` (the character generator ROM) and the IPL-ROM the
   setting names (`iplrom.dat` for the default).
-- **Floppy disks**: one or two, in drives 0 and 1; the first is the one the
-  machine boots. The X68000's own images (`.dim`, `.xdf`/`.hdm`/`.2hd`), the
-  D88 family (`.d88`, `.d77`, `.1dd`), and MAME's other floppy containers
-  (`.mfm`, `.td0`, `.imd`, `.86f`, `.cqm`, `.dsk`, `.mfi`, `.dfi`).
+- **Floppy disks**: as many as the game has. The first two are in drives 0
+  and 1 at power-on, and the machine boots the first; the disk controls go
+  through the whole list, a drive passing over the disk in the other one. The
+  X68000's own images (`.dim`, `.xdf`/`.hdm`/`.2hd`), the D88 family (`.d88`,
+  `.d77`, `.1dd`), and MAME's other floppy containers (`.mfm`, `.td0`, `.imd`,
+  `.86f`, `.cqm`, `.dsk`, `.mfi`, `.dfi`). What a program writes to a disk
+  stays with it for the session, also after it comes out.
+- **Hard disk** (optional): a SASI image (`.hdf`). The core works on a copy in
+  memory; Export Save Data writes it as it is then, under its own name, beside
+  `SRAM.DAT`, and that file can be given here to go on from it.
 
 The package carries no ROM and no disk.
 

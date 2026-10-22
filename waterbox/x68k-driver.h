@@ -13,6 +13,17 @@ extern "C" {
 // rtc, flop1, flop2, ...); "rompath" is where the firmware files are.
 void x68k_set_option(const char *name, const char *value);
 
+// The project's floppies, in order, before x68k_init: every one of them, not
+// just the two given as flop1 and flop2, for the drives' disk controls.
+void x68k_add_disk(const char *name);
+
+// The file in a floppy drive (0 or 1), or "-" when it is empty: for the gate.
+const char *x68k_drive_disk(int drive);
+
+// The SASI hard disk as it is now, with what was written to it, or null when
+// there is none.
+const uint8_t *x68k_hard_disk(uint32_t *size);
+
 // Builds and starts the machine and runs it to the end of its first frame.
 // 0 on success; otherwise x68k_error() says why.
 int x68k_init(void);

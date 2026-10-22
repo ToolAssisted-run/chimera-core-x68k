@@ -1,11 +1,11 @@
 {
-  "_comment": "This file lists the kinds of file an X68000 project can hold. Chimera's New Project window is built from it. A project is its floppy disks, and the SRAM it starts with.",
+  "_comment": "This file lists the kinds of file an X68000 project can hold. Chimera's New Project window is built from it. A project is its floppy disks, a hard disk if it has one, and the SRAM it starts with.",
   "slots": [
     {
       "id": "floppy",
       "title": "Floppy disks",
-      "min": 1,
-      "max": 2,
+      "min": 0,
+      "max": -1,
       "formats": [
         "dim",
         "xdf",
@@ -24,7 +24,17 @@
         "mfi",
         "dfi"
       ],
-      "help": "The disks in drives 0 and 1, in that order. The machine starts from the first one. Accepted are the X68000's own image formats (.dim, .xdf, .hdm, .2hd), the D88 family, and MAME's floppy formats (.mfm, .td0, .imd, .86f, .mfi and others). A game on more than two disks needs its first two here."
+      "help": "The game's disks, as many as it has. The first is in drive 0 and the second in drive 1 when the machine starts, and the machine starts from the first. Each drive's Previous Disk and Next Disk controls go through this list in its order, passing over the disk in the other drive, and Eject Disk empties the drive. What a program writes to a disk stays with it for the session, also after it comes out, and your files are never changed. Accepted are the X68000's own image formats (.dim, .xdf, .hdm, .2hd), the D88 family, and MAME's floppy formats (.mfm, .td0, .imd, .86f, .mfi and others)."
+    },
+    {
+      "id": "hdd",
+      "title": "Hard disk",
+      "min": 0,
+      "max": 1,
+      "formats": [
+        "hdf"
+      ],
+      "help": "A SASI hard disk image (.hdf), as X68000 emulators make them, on the original X68000's hard disk port. The core works on a copy in memory: what is written stays for the session, is part of savestates, and Export Save Data writes the disk as it is then, under its own name, which can be given here to go on from it. Your file is never changed."
     },
     {
       "id": "savedata",

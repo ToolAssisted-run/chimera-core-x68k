@@ -72,6 +72,16 @@ wandered over, and across a rerecord around every frame and a new host.
    sandbox has no directories, only the files a project mounts by name.
 2. `osdlib_unix.cpp`: no SDL, no host clipboard.
 3. `sound.h`: `sound_manager::chimera_flush()`, a frame's sound at its end.
+4. `posixfile.cpp`: a file MAME opens for writing (a floppy, the hard disk) is
+   a copy in memory, read once from the file and then kept; nothing is ever
+   written to a file, and a savestate holds what the machine wrote. Taken
+   from chimera-core-mamehome (its 0011).
+5. `floppy.cpp`: a disk taken out keeps what was written to it, by the name
+   of its file, and putting it in again takes the kept image. With the image
+   kept there is nothing to write back: the X68000 ejects disks itself, and
+   its unload callback stops the motor, which wrote back an image that was no
+   longer there and crashed (the gate's swap legs found it). From
+   chimera-core-mamehome's 0012, without its CPC disk export.
 
 ## The panel
 
@@ -115,19 +125,39 @@ because the stand-in has no kanji.
 
 Not covered: a disk, so nothing after the IPL; and any text drawn in kanji.
 
+## Disks and the hard disk (chimera issues 351 and 352, 2026-10-22)
+
+A game can have any number of floppies. The first two are in drives 0 and 1
+at power-on; each drive has Previous Disk, Next Disk and Eject Disk controls
+of the core's own, after the machine's. They go through the project's list
+(round the end), a drive passing over the disk in the other one, and act at
+the start of the frame they are pressed for, in MAME's own turn. Whether a
+drive holds a disk is asked of MAME each time: the IPL-ROM ejects a disk it
+cannot start from. The SASI hard disk (MAME's x68k_hdc, `.hdf`) is the Hard
+disk slot, mounted as MAME's `sasi` option; it is a copy in memory (patch 4)
+and goes out with the save data under its own name.
+
+The gate runs them on the free machine, so in CI too: three blank disks of the
+gate's own, five presses, and what each drive holds after each one (the native
+runner prints it with `X68K_DRIVES`); native == sandbox and a save and load
+around every frame with those presses; and a blank hard disk of MAME's own
+size coming back unchanged in the save data. Each of those was seen to fail
+broken. Not tested: a game on several disks (no free one here), a program
+writing to a disk and reading it back after a swap, and booting from a hard
+disk (no bootable image here).
+
 ## Open
 
-- **More than two disks.** A game on three or four disks needs a disk swap
-  control; MAME can change a drive's image at run time, the core does not
-  offer it yet. What a program writes to a floppy stays in memory (and in
-  savestates) and is not exported.
+- What a program writes to a floppy stays in memory (and in savestates) and is
+  not exported.
 - **Lag frames** are not counted (see README): programs read the keyboard and
   mouse from RAM their interrupts fill. A joystick-port read tap would count
   something, but not the truth for a keyboard game.
 - **Other models.** MAME's x68ksupr, x68kxvi and x68030 are in the same driver
   file and build; only the x68000 is offered. The XVI and 030 need more
   firmware (SCSI ROMs).
-- **Hard disks, MIDI, expansion cards**: not offered.
+- **MIDI, expansion cards**: not offered. The hard disk is the original
+  X68000's SASI one only.
 - MAME's "Enable fake bus errors" configuration switch stays at its default
   (on).
 - The package has not been run on Windows, nor in the GUI.
