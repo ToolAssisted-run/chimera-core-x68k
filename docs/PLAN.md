@@ -162,3 +162,19 @@ disk (no bootable image here).
   (on).
 - The package has not been run on Windows, nor in the GUI.
 - Chimera: `SystemNames` has no entry for `X68000`, so it shows as the id.
+
+## A project of a hard disk alone (2026-10-24, chimera#362)
+
+A disk opened with no project has no slot map, and the core boots the file
+rom.name names from the first floppy drive. That fallback also ran for a
+project with no floppy: the engine mounts rom.name in a project too, naming
+its first file, so a project of a hard disk alone put the .hdf in the floppy
+drive, and MAME stopped: "Device 5.25" high density floppy drive load failed:
+Unable to identify image file format" (exit code 4). The fallback now runs
+only when there is no slot map; a project's files go where its slot map says.
+
+Tested: the gate's new check "a project of a hard disk alone builds, its disk
+in no floppy drive" (a blank SASI image in the Hard disk slot, rom.name naming
+it, natively and in the sandbox) fails with the old fallback, with the
+reported error, and passes with the new; the gate: 29 passed, 0 failed, 1
+skipped (the free machine's legs: no X68K_FREE_ROMS folder here).

@@ -128,10 +128,15 @@ ECL_EXPORT int Init(void)
 		snprintf(opt, sizeof opt, "flop%d", int(i + 1));
 		x68k_set_option(opt, entry);
 	}
-	if (disks == 0)
+	/* a disk opened with no project has no slot map: it is mounted under its
+	 * own name, and rom.name says which. A project always has a map, and
+	 * rom.name then names its first file, which may be the hard disk of a
+	 * project with no floppy (chimera#362): it is not a floppy */
+	FILE *map = fopen("slots", "rb");
+	const bool slotMap = map != nullptr;
+	if (map) fclose(map);
+	if (disks == 0 && !slotMap)
 	{
-		/* a disk opened with no project has no slot map: it is mounted under
-		 * its own name, and rom.name says which */
 		FILE *f = fopen("rom.name", "rb");
 		if (f)
 		{

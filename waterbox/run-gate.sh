@@ -282,6 +282,18 @@ workdir() {
 w="$work/df"
 workdir "$w" dogfight.dim
 
+# a project of a hard disk and no floppy (chimera#362): the engine mounts rom.name, naming the
+# project's first file, the hard disk; it is not put in a floppy drive, and the machine is built
+hr="$work/hdd-romname"; workdir "$hr"
+python3 -c "import sys; open(sys.argv[1], 'wb').write(bytes(256 * 0x13c98))" "$hr/blank.hdf"
+printf '{"hdd":["blank.hdf"]}' > "$hr/slots"
+printf 'blank.hdf' > "$hr/rom.name"
+"$native" "$hr" --frames 60 --report 60 > "$work/hdd-romname.n" 2>&1 || true
+"$wbxrun" "$core" "$hr" --frames 60 --report 60 > "$work/hdd-romname.w" 2>&1 || true
+check "a project of a hard disk alone builds, its disk in no floppy drive" \
+	"$(grep -o 'Init failed.*' "$work/hdd-romname.w" | head -1)" \
+	sh -c "! grep -q 'Init failed\|load failed' '$work/hdd-romname.n' '$work/hdd-romname.w' && grep -q '^frame *60 ' '$work/hdd-romname.w'"
+
 # the panel the core binds is the panel the package declares; the comparer is
 # shown a declaration with two controls swapped and must refuse it
 "$wbxrun" "$core" "$w" --frames 1 --list-panel > "$work/panel" 2>&1 || true
