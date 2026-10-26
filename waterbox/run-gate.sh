@@ -41,6 +41,28 @@ done
 [ -n "$mb" ] || mb="$chimera_root/extern/chimera-common-minibox"
 
 work="$root/build/gate"
+# A game runs only in a project (Chimera, 2026-10-26): crun_game <package>
+# <game> <movie> [chimera-run's options] makes one of the game and the movie,
+# with any --settings and --firmware given, and runs it with the rest.
+crun_quote() { printf "'%s'" "$(printf '%s' "$1" | sed "s/'/'\\\\''/g")"; }
+crun_game() {
+	cg_pkg="$1" cg_game="$2" cg_movie="$3" cg_made=""
+	shift 3
+	cg_n=$#
+	while [ "$cg_n" -gt 0 ]; do
+		case "$1" in
+			--settings) cg_made="$cg_made --settings $(crun_quote "$2")"; shift 2; cg_n=$((cg_n - 2)); continue ;;
+			--settings=*) cg_made="$cg_made --settings $(crun_quote "${1#--settings=}")"; shift; cg_n=$((cg_n - 1)); continue ;;
+			--firmware) cg_made="$cg_made --firmware $(crun_quote "$2")"; set -- "$@" "$1" "$2"; shift 2; cg_n=$((cg_n - 2)); continue ;;
+			--firmware=*) cg_made="$cg_made --firmware $(crun_quote "${1#--firmware=}")"; set -- "$@" "$1"; shift; cg_n=$((cg_n - 1)); continue ;;
+		esac
+		set -- "$@" "$1"; shift; cg_n=$((cg_n - 1))
+	done
+	cg_dir="$(mktemp -d "$work/project.XXXXXX")"
+	eval "\"\$run\" --new-project \"\$cg_dir/game.chimeraProject\" \"\$cg_pkg\" \"\$cg_game\" \"\$cg_movie\" $cg_made" \
+		> "$cg_dir/make.log" 2>&1 || { echo "chimera-run: no project made: $(tail -1 "$cg_dir/make.log")" >&2; return 2; }
+	"$run" --project "$cg_dir/game.chimeraProject" "$cg_pkg" --files "$(dirname "$cg_game")" "$@"
+}
 rm -rf "$work"; mkdir -p "$work"
 native="$root/build/native/run-native"
 probe="$root/build/native/x68k-probe"
@@ -512,7 +534,7 @@ console = sum(1 for n in b if not n.startswith(("P1 ", "P2 ")))
 line = "|    0,    0," + "." * console + "|" + "." * 8 + "|" + "." * 8 + "|\n"
 open(sys.argv[2], "w").write(line * 600)
 PY
-	"$run" "$pkg" "$roms/dogfight.dim" "$work/idle.movie" \
+	crun_game "$pkg" "$roms/dogfight.dim" "$work/idle.movie" \
 		--firmware cgrom.dat="$roms/cgrom.dat" --firmware iplrom.dat="$roms/iplrom.dat" \
 		--dump "Main RAM=$work/engine.ram" > "$work/engine.log" 2>&1 || true
 	for n in 599 600 601; do
@@ -524,7 +546,7 @@ PY
 	else
 		report FAIL "the engine runs it: RAM == native at 600" "see build/gate/engine.log"
 	fi
-	"$run" "$pkg" "$roms/dogfight.dim" "$work/idle.movie" \
+	crun_game "$pkg" "$roms/dogfight.dim" "$work/idle.movie" \
 		--firmware iplrom.dat="$roms/iplrom.dat" > "$work/nofw.log" 2>&1 || true
 	if grep -q 'cgrom.dat' "$work/nofw.log" && ! grep -q '^frames=600' "$work/nofw.log"; then
 		report PASS "without cgrom.dat the engine refuses it" "$(grep -o 'cgrom.dat[^"]*' "$work/nofw.log" | head -1 | cut -c1-50)"
