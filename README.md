@@ -81,8 +81,8 @@ The package carries no ROM and no disk.
 Chimera ships no cores and downloads nothing. Download the `.chimeraCore`
 package from this repository's
 [Releases](https://github.com/ToolAssisted-run/chimera-core-x68k/releases)
-page, or build it, and put it in the `Cores` folder beside `Chimera.exe`.
-File > Core Manager lists it. The same file works on Linux and on Windows.
+page, or build it, and put it in the `cores` folder beside Chimera's program.
+Tools > Core Manager... lists it. The same file works on Linux and on Windows.
 
 ## Building
 
