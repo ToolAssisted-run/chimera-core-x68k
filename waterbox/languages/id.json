@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Jam saat dinyalakan, \"%1\", bukan tanggal dan waktu dari 1980 sampai 2079 yang ditulis sebagai YYYY-MM-DD HH:MM:SS.",
+		"error.bad_ipl": "'%1' bukan IPL-ROM yang dimiliki core ini.",
+		"error.mame_exit": "Mesin berhenti (kode keluar MAME %1).",
+		"error.mame_option": "MAME tidak memiliki opsi \"%1\".",
+		"error.needs_firmware": "X68000 membutuhkan %1. Tambahkan sebagai firmware proyek.",
+		"error.no_driver": "X68000 tidak ada dalam daftar driver build ini.",
+		"error.not_sram": "Data simpanan '%1' bukan SRAM X68000 (16384 byte).",
+		"error.sram_not_loaded": "SRAM tidak dapat dimuat.",
+		"firmware.cgrom_dat": "ROM generator karakter (cgrom.dat)",
+		"firmware.cgrom_dat.about": "ROM font X68000 (768 KB). Berisi karakter kanji, kana, dan ASCII yang dipakai setiap model untuk menggambar teksnya. ROM ini milik Sharp, dan Anda harus menyediakannya sendiri. Berkas yang sama dipakai dengan setiap IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. Pengaturan IPL-ROM \"%2\" memulai mesin dari berkas ini, yang memakai nama yang diberikan MAME. ROM ini milik Sharp, dan Anda harus menyediakannya sendiri.",
+		"setting.clock": "Jam saat dinyalakan",
+		"setting.clock.about": "Tanggal dan waktu jam mesin (chip RP5C15) saat dinyalakan, ditulis sebagai YYYY-MM-DD HH:MM:SS, dari 1980 sampai 2079. Sejak itu ia berjalan bersama mesin yang diemulasi dan tidak pernah bersama jam komputer Anda. Sistem Human68k memberi cap waktu pada berkas dengan jam ini, dan sebagian program mengambil angka acaknya darinya. Ini bagian dari mesin, jadi movie membutuhkan nilai yang sama.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "IPL-ROM mana (BIOS X68000) yang dipakai mesin untuk booting: %1. Setiap pilihan adalah berkas firmware sendiri. Default MAME sendiri adalah cz600ce; default core ini adalah ipl10, ROM yang paling banyak dimiliki koleksi sebagai iplrom.dat. Bagian dari mesin: movie membutuhkan yang sama.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Memori utama, dari 1 sampai 12 MB. X68000 dijual dengan 1 atau 2 MB. Default MAME dan default core ini adalah 4 MB, yang cukup untuk sebagian besar perangkat lunak. Ini bagian dari mesin, jadi movie membutuhkan ukuran yang sama.",
+		"slot.floppy": "Disket",
+		"slot.floppy.help": "Disk milik game, sebanyak yang dimilikinya. Yang pertama ada di drive 0 dan yang kedua di drive 1 saat mesin dinyalakan, dan mesin mulai dari yang pertama. Tombol Previous Disk dan Next Disk setiap drive berjalan melalui daftar ini sesuai urutannya, melewati disk di drive lain, dan Eject Disk mengosongkan drive. Apa pun yang ditulis program ke disk tetap bersamanya selama sesi, juga setelah dikeluarkan, dan berkas Anda tidak pernah diubah. Format citra asli X68000 (.dim, .xdf, .hdm, .2hd), keluarga D88, dan format disket MAME (.mfm, .td0, .imd, .86f, .mfi, dan lainnya) diterima.",
+		"slot.hdd": "Hard disk",
+		"slot.hdd.help": "Citra hard disk SASI (.hdf), seperti yang dibuat emulator X68000, pada port hard disk X68000 asli. Core bekerja pada salinan di memori: apa yang ditulis tetap ada selama sesi, menjadi bagian dari savestate, dan Export Save Data menulis disk apa adanya saat itu, dengan namanya sendiri, yang bisa diberikan di sini untuk melanjutkan darinya. Berkas Anda tidak pernah diubah.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Memori bertenaga baterai milik mesin (SRAM) sebesar 16 KB seperti keadaannya saat dinyalakan, dalam berkas yang ditulis Export Save Data (SRAM.DAT). Berisi pengaturan mesin (perangkat start-up, mode layar, sakelar memori) dan apa pun yang disimpan program di sana. Berkasnya dalam urutan byte yang dibaca X68000 asli. Berkas nvram milik MAME juga dikenali dan diterima. Tanpa berkas, mesin mulai dengan SRAM kosong, yang kemudian diisi oleh IPL-ROM."
+	}
+}

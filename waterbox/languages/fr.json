@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "L'horloge au démarrage, « %1 », n'est pas une date et une heure de 1980 à 2079 écrites AAAA-MM-JJ HH:MM:SS.",
+		"error.bad_ipl": "'%1' n'est pas une IPL-ROM que ce cœur possède.",
+		"error.mame_exit": "La machine s'est arrêtée (code de sortie de MAME %1).",
+		"error.mame_option": "MAME n'a pas d'option \"%1\".",
+		"error.needs_firmware": "Le X68000 a besoin de %1. Ajoutez-le comme firmware du projet.",
+		"error.no_driver": "Le X68000 ne figure pas dans la liste des pilotes de cette version.",
+		"error.not_sram": "Les données de sauvegarde '%1' ne sont pas une SRAM de X68000 (16384 octets).",
+		"error.sram_not_loaded": "La SRAM n'a pas pu être chargée.",
+		"firmware.cgrom_dat": "ROM du générateur de caractères (cgrom.dat)",
+		"firmware.cgrom_dat.about": "La ROM de polices du X68000 (768 Ko). Elle contient les caractères kanji, kana et ASCII avec lesquels chaque modèle dessine son texte. Elle est de Sharp, et vous devez la fournir. Le même fichier sert avec toutes les IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "La %1. Le réglage IPL-ROM \"%2\" démarre la machine à partir de ce fichier, qui porte le nom que lui donne MAME. Elle est de Sharp, et vous devez la fournir.",
+		"setting.clock": "Horloge à la mise sous tension",
+		"setting.clock.about": "La date et l'heure de l'horloge de la machine (la puce RP5C15) à la mise sous tension, écrites AAAA-MM-JJ HH:MM:SS, de 1980 à 2079. À partir de là, elle suit la machine émulée, et jamais l'horloge de votre ordinateur. Le système Human68k horodate les fichiers avec elle, et certains programmes tirent leurs nombres aléatoires d'elle. Elle fait partie de la machine : un film a donc besoin de la même valeur.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "L'IPL-ROM (le BIOS du X68000) avec lequel la machine démarre : %1. Chacune est son propre fichier de firmware. Le réglage par défaut de MAME est cz600ce ; celui de ce cœur est ipl10, la ROM que la plupart des collections portent sous le nom iplrom.dat. Elle fait partie de la machine : un film a besoin de la même.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "La mémoire principale, de 1 à 12 Mo. Un X68000 était vendu avec 1 ou 2 Mo. La valeur par défaut de MAME et de ce cœur est 4 Mo, suffisante pour la plupart des logiciels. Elle fait partie de la machine : un film a donc besoin de la même taille.",
+		"slot.floppy": "Disquettes",
+		"slot.floppy.help": "Les disquettes du jeu, autant qu'il en a. La première est dans le lecteur 0, et la deuxième dans le lecteur 1 au démarrage ; la machine démarre sur la première. Les commandes Disquette précédente et Disquette suivante de chaque lecteur parcourent cette liste dans son ordre, en sautant la disquette de l'autre lecteur, et Éjecter la disquette vide le lecteur. Ce qu'un programme écrit sur une disquette reste avec elle pendant la session, aussi après son éjection, et vos fichiers ne sont jamais modifiés. Sont acceptés les formats d'image propres au X68000 (.dim, .xdf, .hdm, .2hd), la famille D88, et les formats de disquette de MAME (.mfm, .td0, .imd, .86f, .mfi et d'autres).",
+		"slot.hdd": "Disque dur",
+		"slot.hdd.help": "Une image de disque dur SASI (.hdf), telle que les émulateurs X68000 les font, sur le port de disque dur du X68000 d'origine. Le cœur travaille sur une copie en mémoire : ce qui est écrit reste pour la session, fait partie des états enregistrés, et Exporter les données de sauvegarde écrit le disque tel qu'il est à ce moment, sous son propre nom, qui peut être donné ici pour repartir de lui. Votre fichier n'est jamais modifié.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Les 16 Ko de mémoire à pile (SRAM) de la machine, tels qu'ils sont à la mise sous tension, dans le fichier qu'a écrit Exporter les données de sauvegarde (SRAM.DAT). Elle contient les réglages de la machine (périphérique de démarrage, mode d'écran, commutateurs de mémoire) et tout ce qu'un programme y a rangé. Le fichier est dans l'ordre des octets qu'un vrai X68000 lit. Le fichier de mémoire nvram de MAME est aussi reconnu et accepté. Sans fichier, la machine démarre avec une SRAM vide, que l'IPL-ROM remplit ensuite."
+	}
+}

@@ -473,7 +473,7 @@ check "the clock is part of the machine" "negative control: the default as digit
 	[ "$(field "$(tail -1 "$work/clock.n")" ram)" != "$(field "$base" ram)" -a "$(field "$digits" ram)" = "$(field "$base" ram)" ]
 bad="$(setrun badclock '{"clock":"2000-02-30 12:00:00"}')"
 case "$bad" in
-	*"is not a date and time"*) report PASS "a clock that is no date is refused" "2000-02-30" ;;
+	*"error.bad_clock"*) report PASS "a clock that is no date is refused" "2000-02-30" ;;
 	*) report FAIL "a clock that is no date is refused" "$bad" ;;
 esac
 setrun ram12 '{"ram":"12M"}' --dump-domain "Main RAM" "$work/ram12.bin" > "$work/ram12.log"
@@ -485,7 +485,7 @@ for ipl in ipl11 cz600ce; do
 	missing="$(setrun "$ipl" "{\"ipl_rom\":\"$ipl\"}")"
 	want=iplromxv.dat; [ "$ipl" = cz600ce ] && want=rh-ix0897cezz.ic12
 	case "$missing" in
-		*"needs $want"*) report PASS "$ipl without its ROM is a load error naming it" "$want" ;;
+		*"error.needs_firmware"?"$want"*) report PASS "$ipl without its ROM is a load error naming it" "$want" ;;
 		*) report FAIL "$ipl without its ROM is a load error naming it" "$missing" ;;
 	esac
 done

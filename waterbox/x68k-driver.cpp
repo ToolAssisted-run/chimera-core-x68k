@@ -191,6 +191,11 @@ constexpr int kSampleRate = 48000;
 
 cothread_t s_host, s_mame;
 bool s_stopped;
+/* A text a person reads is a key of languages/en.json, each of its
+ * arguments after a TEXT_ARG (chimera docs/translations.md). TEXT_ARG is a
+ * string of its own so the byte after it is never read as more of its hex. */
+#define TEXT_ARG "\x1f"
+
 std::string s_error;
 std::map<std::string, std::string> s_options;
 running_machine *s_machine;
@@ -385,7 +390,7 @@ public:
 		nvram_device *const nvram = machine.root_device().subdevice<nvram_device>("nvram");
 		auto file = util::ram_read(s_sram_in.data(), s_sram_in.size());
 		if (!nvram || !file || !nvram->nvram_load(*file))
-			throw emu_fatalerror("the SRAM could not be loaded");
+			throw emu_fatalerror("error.sram_not_loaded");
 	}
 	~chimera_manager() override { delete m_ui; }
 private:
@@ -406,7 +411,7 @@ void mame_main()
 		s_machine = &machine;
 		int const result = machine.run(false);
 		if (s_error.empty())
-			s_error = "the machine stopped (MAME exit code " + std::to_string(result) + ")";
+			s_error = std::string("error.mame_exit") + TEXT_ARG + std::to_string(result);
 	}
 	catch (emu_fatalerror const &e)
 	{
@@ -424,7 +429,7 @@ void mame_main()
 void set(core_options &opts, const char *name, std::string const &value)
 {
 	if (!opts.get_entry(name))
-		throw std::runtime_error(std::string("MAME has no option \"") + name + "\"");
+		throw std::runtime_error(std::string("error.mame_option") + TEXT_ARG + name);
 	opts.set_value(name, value, OPTION_PRIORITY_CMDLINE);
 }
 
@@ -467,7 +472,7 @@ extern "C" int x68k_init(void)
 		for (auto const &kv : s_options)
 			set(o, kv.first.c_str(), kv.second);
 		if (!o.system())
-			throw std::runtime_error("the X68000 is not in this build's driver list");
+			throw std::runtime_error("error.no_driver");
 
 		s_osd = new chimera_osd();
 		s_manager = new chimera_manager(o, *s_osd);

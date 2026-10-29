@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Čas hodin při zapnutí, '%1', není datum a čas od roku 1980 do 2079 zapsaný jako RRRR-MM-DD HH:MM:SS.",
+		"error.bad_ipl": "'%1' není IPL-ROM, který toto jádro má.",
+		"error.mame_exit": "Stroj se zastavil (návratový kód MAME %1).",
+		"error.mame_option": "MAME nemá volbu „%1“.",
+		"error.needs_firmware": "X68000 potřebuje %1. Přidejte jej jako firmware projektu.",
+		"error.no_driver": "X68000 není v seznamu ovladačů tohoto sestavení.",
+		"error.not_sram": "Uložená data '%1' nejsou SRAM X68000 (16384 bajtů).",
+		"error.sram_not_loaded": "SRAM nelze načíst.",
+		"firmware.cgrom_dat": "Generátor znaků (cgrom.dat)",
+		"firmware.cgrom_dat.about": "Fontová ROM X68000 (768 KB). Obsahuje znaky kanji, kana a ASCII, kterými každý model kreslí svůj text. Je od firmy Sharp a musíte ji zadat sami. Stejný soubor se používá s každou IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. Nastavení IPL-ROM „%2“ spustí stroj z tohoto souboru, který má jméno, jaké mu dává MAME. Je od firmy Sharp a musíte jej zadat sami.",
+		"setting.clock": "Čas hodin při zapnutí",
+		"setting.clock.about": "Datum a čas hodin stroje (čip RP5C15) při zapnutí, zapsané jako RRRR-MM-DD HH:MM:SS, od roku 1980 do 2079. Odtud běží s emulovaným strojem a nikdy s hodinami vašeho počítače. Systém Human68k jimi označuje soubory a některé programy z nich berou náhodná čísla. Je součástí stroje, takže záznam potřebuje stejnou hodnotu.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Která IPL-ROM (BIOS X68000) stroj zavádí: %1. Každá je vlastní soubor firmwaru. Výchozí hodnota MAME je cz600ce; výchozí hodnota tohoto jádra je ipl10, ROM, kterou má většina sbírek jako iplrom.dat. Je součástí stroje: záznam potřebuje tu samou.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Hlavní paměť, od 1 do 12 MB. X68000 se prodávala s 1 nebo 2 MB. Výchozí hodnota MAME i tohoto jádra je 4 MB, což stačí pro většinu software. Je součástí stroje, takže záznam potřebuje stejnou velikost.",
+		"slot.floppy": "Diskety",
+		"slot.floppy.help": "Disky hry, kolik jich má. První je v mechanice 0 a druhý v mechanice 1, když stroj startuje, a stroj startuje z prvního. Ovládání Previous Disk a Next Disk každé mechaniky prochází tímto seznamem v jeho pořadí a přeskakuje disk v druhé mechanice, a Eject Disk mechaniku vyprázdní. Co program zapíše na disk, zůstane s ním pro relaci, i po vysunutí, a vaše soubory se nikdy nemění. Přijímají se obrazy vlastních formátů X68000 (.dim, .xdf, .hdm, .2hd), rodina D88 a floppy formáty MAME (.mfm, .td0, .imd, .86f, .mfi a další).",
+		"slot.hdd": "Pevný disk",
+		"slot.hdd.help": "Obraz pevného disku SASI (.hdf), jaké dělají emulátory X68000, na původním portu pevného disku X68000. Jádro pracuje na kopii v paměti: co se zapíše, zůstane pro relaci, je součástí uložených stavů a Exportovat uložená data zapíše disk tak, jak je v tu chvíli, pod svým vlastním jménem. To se dá zadat sem, aby se pokračovalo. Váš soubor se nikdy nemění.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "16 KB paměti na baterii (SRAM) v podobě, v jaké je při zapnutí, v souboru, který zapsal Exportovat uložená data (SRAM.DAT). Obsahuje nastavení stroje (zaváděcí zařízení, režim obrazovky, paměťové přepínače) a cokoli, co tam program uložil. Soubor je v pořadí bajtů, jaké čte skutečný X68000. Vlastní soubor nvram z MAME je také rozpoznán a přijat. Bez souboru stroj začne s prázdnou SRAM, kterou pak IPL-ROM vyplní."
+	}
+}

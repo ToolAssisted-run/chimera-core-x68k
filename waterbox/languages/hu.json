@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "A bekapcsoláskori óra, \"%1\", nem olyan dátum és időpont, amely 1980 és 2079 között van, és YYYY-MM-DD HH:MM:SS alakban íródik.",
+		"error.bad_ipl": "A(z) '%1' nem olyan IPL-ROM, amelyet ez a mag ismer.",
+		"error.mame_exit": "A gép leállt (MAME kilépési kód: %1).",
+		"error.mame_option": "A MAME-nak nincs \"%1\" nevű opciója.",
+		"error.needs_firmware": "Az X68000-nek szüksége van erre: %1. Add hozzá a projekt firmware-jeként.",
+		"error.no_driver": "Az X68000 nincs ennek a verziónak a meghajtólistájában.",
+		"error.not_sram": "A(z) '%1' mentett adat nem X68000 SRAM (16384 bájt).",
+		"error.sram_not_loaded": "Az SRAM nem tölthető be.",
+		"firmware.cgrom_dat": "Karaktergenerátor ROM (cgrom.dat)",
+		"firmware.cgrom_dat.about": "Az X68000 betűkészlet-ROM-ja (768 KB). Ebben vannak a kandzsi-, kana- és ASCII-karakterek, amelyekkel minden modell írja a szöveget. A Sharp készítette, neked kell megadnod. Ugyanazt a fájlt használja minden IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "A(z) %1. Az IPL-ROM beállítás \"%2\" ebből a fájlból indítja a gépet, amely azt a nevet viseli, amelyet a MAME adott neki. A Sharp készítette, neked kell megadnod.",
+		"setting.clock": "Óra bekapcsoláskor",
+		"setting.clock.about": "A gép órájának (az RP5C15 chip) dátuma és ideje bekapcsoláskor, YYYY-MM-DD HH:MM:SS alakban, 1980 és 2079 között. Innentől az emulált géppel fut, soha nem a számítógéped órájával. A Human68k ezzel bélyegzi a fájlokat, és néhány program ebből veszi a véletlenszámait. A gép része, ezért a movie-nak ugyanaz az érték kell.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Melyik IPL-ROM-ról (az X68000 BIOS-áról) induljon a gép: %1. Mindegyik saját firmware-fájl. A MAME saját alapértéke a cz600ce; ennek a magnak az ipl10, amelyet a legtöbb gyűjtemény iplrom.dat néven tart. A gép része: a movie-nak ugyanaz kell.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "A főmemória, 1 és 12 MB között. Az X68000-et 1 vagy 2 MB-tal adták el. A MAME alapértéke és ennek a magnak az alapértéke 4 MB, ami a legtöbb szoftverhez elég. A gép része, ezért a movie-nak ugyanaz a méret kell.",
+		"slot.floppy": "Hajlékonylemezek",
+		"slot.floppy.help": "A játék lemezei, annyi, ahány van. Az első a 0-s meghajtóban, a második az 1-esben van, amikor a gép elindul, és a gép az elsőről indul. Mindkét meghajtó Előző lemez és Következő lemez vezérlői ezen a listán mennek végig a sorrendjében, átugorva a másik meghajtóban lévő lemezt, a Lemez kidobása pedig kiüríti a meghajtót. Amit egy program egy lemezre ír, az a munkamenetre megmarad, a kivétel után is, és a fájljaidat soha nem módosítják. Elfogadottak az X68000 saját képformátumai (.dim, .xdf, .hdm, .2hd), a D88-család, és a MAME hajlékonylemez-formátumai (.mfm, .td0, .imd, .86f, .mfi és mások).",
+		"slot.hdd": "Merevlemez",
+		"slot.hdd.help": "Egy SASI merevlemez-kép (.hdf), ahogyan az X68000-emulátorok készítik, az eredeti X68000 merevlemez-portján. A mag a memóriában lévő másolattal dolgozik: ami rá íródik, az a munkamenetre megmarad, az állapotmentés része, és az Export Save Data a lemezt az akkori állapotában, a saját nevén írja ki, és ez itt megadható, hogy onnan folytasd. A fájlod soha nem módosul.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "A gép 16 KB-os, elemmel táplált memóriája (SRAM) abban az állapotban, ahogyan bekapcsoláskor van, abban a fájlban, amelyet az Export Save Data írt (SRAM.DAT). Tartalmazza a gép beállításait (indítóeszköz, képernyőmód, memóriakapcsolók) és mindent, amit egy program ide tárolt. A fájl abban a bájtsorrendben van, amelyet egy valódi X68000 olvas. A MAME saját nvram-fájlja is felismerésre kerül, és elfogadott. Fájl nélkül a gép üres SRAM-mal indul, amelyet az IPL-ROM ezután feltölt."
+	}
+}

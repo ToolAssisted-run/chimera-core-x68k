@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Die Uhr beim Einschalten, „%1“, ist kein Datum und keine Uhrzeit von 1980 bis 2079 im Format JJJJ-MM-TT HH:MM:SS.",
+		"error.bad_ipl": "„%1“ ist kein IPL-ROM, das dieser Core hat.",
+		"error.mame_exit": "Die Maschine ist angehalten (MAME-Exitcode %1).",
+		"error.mame_option": "MAME hat keine Option „%1“.",
+		"error.needs_firmware": "Der X68000 braucht %1. Fügen Sie sie als Firmware des Projekts hinzu.",
+		"error.no_driver": "Der X68000 steht nicht in der Treiberliste dieses Builds.",
+		"error.not_sram": "Die Spieldaten „%1“ sind kein X68000-SRAM (16384 Byte).",
+		"error.sram_not_loaded": "Das SRAM konnte nicht geladen werden.",
+		"firmware.cgrom_dat": "Zeichengenerator-ROM (cgrom.dat)",
+		"firmware.cgrom_dat.about": "Das Schrift-ROM des X68000 (768 KB). Es enthält die Kanji-, Kana- und ASCII-Zeichen, mit denen jedes Modell seinen Text zeichnet. Es stammt von Sharp, und Sie müssen es selbst beschaffen. Mit jedem IPL-ROM wird dieselbe Datei verwendet.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "Das %1. Die Einstellung IPL-ROM „%2“ startet die Maschine aus dieser Datei, die den Namen trägt, den MAME ihr gibt. Sie stammt von Sharp, und Sie müssen sie selbst beschaffen.",
+		"setting.clock": "Uhr beim Einschalten",
+		"setting.clock.about": "Datum und Uhrzeit der Uhr der Maschine (des Chips RP5C15) beim Einschalten, im Format JJJJ-MM-TT HH:MM:SS, von 1980 bis 2079. Von dort läuft sie mit der emulierten Maschine und nie mit der Uhr Ihres Computers. Das System Human68k versieht Dateien damit mit Zeitstempeln, und manche Programme holen sich ihre Zufallszahlen daraus. Sie gehört zur Maschine, deshalb braucht ein Film denselben Wert.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Welches IPL-ROM (das BIOS des X68000) die Maschine startet: %1. Jedes ist eine eigene Firmware-Datei. MAMEs eigene Vorgabe ist cz600ce; die dieses Cores ist ipl10, das ROM, das die meisten Sammlungen als iplrom.dat haben. Teil der Maschine: Ein Film braucht dasselbe.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Der Hauptspeicher, von 1 bis 12 MB. Ein X68000 wurde mit 1 oder 2 MB verkauft. MAMEs Vorgabe und die dieses Cores ist 4 MB, was für die meiste Software reicht. Sie gehört zur Maschine, deshalb braucht ein Film dieselbe Größe.",
+		"slot.floppy": "Disketten",
+		"slot.floppy.help": "Die Disketten des Spiels, so viele, wie es hat. Die erste liegt beim Start in Laufwerk 0 und die zweite in Laufwerk 1, und die Maschine startet von der ersten. Die Steuerungen Vorherige Diskette und Nächste Diskette jedes Laufwerks gehen diese Liste in ihrer Reihenfolge durch und überspringen die Diskette im anderen Laufwerk; Diskette auswerfen leert das Laufwerk. Was ein Programm auf eine Diskette schreibt, bleibt für die Sitzung bei ihr, auch nach dem Auswerfen, und Ihre Dateien werden nie verändert. Akzeptiert werden die Abbildformate des X68000 (.dim, .xdf, .hdm, .2hd), die Familie D88 und die Diskettenformate von MAME (.mfm, .td0, .imd, .86f, .mfi und andere).",
+		"slot.hdd": "Festplatte",
+		"slot.hdd.help": "Ein SASI-Festplattenabbild (.hdf), wie es X68000-Emulatoren erzeugen, am Festplattenanschluss des originalen X68000. Der Core arbeitet mit einer Kopie im Speicher: Was geschrieben wird, bleibt für die Sitzung, gehört zu den Speicherständen, und Spieldaten exportieren schreibt die Festplatte in ihrem jetzigen Zustand unter ihrem eigenen Namen, der hier angegeben werden kann, um von ihr weiterzumachen. Ihre Datei wird nie verändert.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Die 16 KB batteriegepufferten Speichers (SRAM) der Maschine, so wie sie beim Einschalten sind, in der Datei, die Spieldaten exportieren geschrieben hat (SRAM.DAT). Er enthält die Einstellungen der Maschine (Startgerät, Bildschirmmodus, Speicherschalter) und alles, was ein Programm dort abgelegt hat. Die Datei liegt in der Byte-Reihenfolge, die ein echter X68000 liest. Die nvram-Datei von MAME wird ebenfalls erkannt und angenommen. Ohne Datei startet die Maschine mit einem leeren SRAM, das das IPL-ROM dann ausfüllt."
+	}
+}

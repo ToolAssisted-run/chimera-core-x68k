@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "开机时的时钟“%1”不是以 YYYY-MM-DD HH:MM:SS 格式写成的、1980 至 2079 年之间的日期和时间。",
+		"error.bad_ipl": "“%1”不是本核心拥有的 IPL-ROM。",
+		"error.mame_exit": "机器已停止（MAME 退出代码 %1）。",
+		"error.mame_option": "MAME 没有选项“%1”。",
+		"error.needs_firmware": "X68000 需要 %1。请将其添加为项目的固件。",
+		"error.no_driver": "X68000 不在本版本的驱动列表中。",
+		"error.not_sram": "存档数据“%1”不是 X68000 的 SRAM（16384 字节）。",
+		"error.sram_not_loaded": "无法加载 SRAM。",
+		"firmware.cgrom_dat": "字符发生器 ROM（cgrom.dat）",
+		"firmware.cgrom_dat.about": "X68000 的字库 ROM（768 KB）。它包含每种机型绘制文字时所用的汉字、假名和 ASCII 字符。它归 Sharp 所有，需要你自行提供。所有 IPL-ROM 使用同一个文件。",
+		"firmware.ipl": "%1（%2）",
+		"firmware.ipl.about": "%1。IPL-ROM 设置“%2”会从这个文件启动机器，文件名与 MAME 对其的命名相同。它归 Sharp 所有，需要你自行提供。",
+		"setting.clock": "开机时的时钟",
+		"setting.clock.about": "机器时钟（RP5C15 芯片）在开机时的日期和时间，以 YYYY-MM-DD HH:MM:SS 格式书写，范围为 1980 至 2079 年。从那时起，它与模拟的机器一起运行，从不跟随你电脑的时钟。Human68k 系统用它为文件盖上时间戳，一些程序则从中选取随机数。它属于机器的一部分，所以录像需要相同的值。",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "机器启动时使用哪个 IPL-ROM（X68000 的 BIOS）：%1。每个都是独立的固件文件。MAME 自身的默认值是 cz600ce；本核心的默认值是 ipl10，即大多数合集中以 iplrom.dat 形式提供的 ROM。它属于机器的一部分：录像需要同一个 IPL-ROM。",
+		"setting.ram": "内存（RAM）",
+		"setting.ram.about": "主内存，从 1 到 12 MB。X68000 出售时配有 1 或 2 MB。MAME 的默认值以及本核心的默认值为 4 MB，对大多数软件来说已足够。它属于机器的一部分，所以录像需要相同的大小。",
+		"slot.floppy": "软盘",
+		"slot.floppy.help": "游戏的磁盘，数量与游戏所需相同。启动时，第一张在驱动器 0 中，第二张在驱动器 1 中，机器从第一张启动。每个驱动器的“上一张磁盘”和“下一张磁盘”控制按此列表的顺序切换，并跳过另一个驱动器中的磁盘；“弹出磁盘”会清空该驱动器。程序写入磁盘的内容在本次会话中保留在该磁盘上，即使取出之后也是如此，你的文件永远不会被修改。接受的格式包括 X68000 自身的镜像格式（.dim、.xdf、.hdm、.2hd）、D88 系列，以及 MAME 的软盘格式（.mfm、.td0、.imd、.86f、.mfi 等）。",
+		"slot.hdd": "硬盘",
+		"slot.hdd.help": "SASI 硬盘镜像（.hdf），即 X68000 模拟器制作的格式，接在原版 X68000 的硬盘接口上。核心在内存中处理该磁盘的副本：写入的内容保留在本次会话中，并属于状态存档的一部分；“导出存档数据”会以磁盘当前的状态，用其自身的名称写出磁盘。此处可以给出该名称，以便从它继续。你的文件永远不会被修改。",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "机器的 16 KB 电池供电存储器（SRAM）在开机时的内容，即由“导出存档数据”写出的文件（SRAM.DAT）。它保存机器的设置（启动设备、屏幕模式、内存开关）以及程序存入其中的任何内容。该文件采用真实 X68000 读取的字节顺序。MAME 自己的 nvram 文件也可以识别并接受。没有文件时，机器以空的 SRAM 启动，随后由 IPL-ROM 将其填满。"
+	}
+}

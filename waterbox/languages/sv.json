@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Klockan vid start, \"%1\", är inte ett datum och en tid från 1980 till 2079 skrivna som ÅÅÅÅ-MM-DD TT:MM:SS.",
+		"error.bad_ipl": "'%1' är inte en IPL-ROM som den här kärnan har.",
+		"error.mame_exit": "Maskinen stannade (MAME:s avslutningskod %1).",
+		"error.mame_option": "MAME har inget alternativ \"%1\".",
+		"error.needs_firmware": "X68000 behöver %1. Lägg till den som projektets firmware.",
+		"error.no_driver": "X68000 finns inte i den här versionens drivrutinslista.",
+		"error.not_sram": "Den sparade datan '%1' är inte ett X68000-SRAM (16384 byte).",
+		"error.sram_not_loaded": "SRAM:et kunde inte läsas in.",
+		"firmware.cgrom_dat": "Teckengenerator-ROM (cgrom.dat)",
+		"firmware.cgrom_dat.about": "X68000:s teckensnitts-ROM (768 KB). Det innehåller kanji-, kana- och ASCII-tecknen som varje modell ritar sin text med. Det är Sharps, och du måste tillhandahålla det. Samma fil används med varje IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. Inställningen IPL-ROM \"%2\" startar maskinen från den här filen, som har det namn MAME ger den. Den är Sharps, och du måste tillhandahålla den.",
+		"setting.clock": "Klocka vid start",
+		"setting.clock.about": "Maskinens klocka (RP5C15-chipet) datum och tid vid start, skrivna som ÅÅÅÅ-MM-DD TT:MM:SS, från 1980 till 2079. Därifrån går den med den emulerade maskinen och aldrig med din datorns klocka. Human68k-systemet stämplar filer med den, och vissa program väljer sina slumptal utifrån den. Den är en del av maskinen, så en film behöver samma värde.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Vilken IPL-ROM (X68000:s BIOS) maskinen startar med: %1. Var och en är sin egen firmwarefil. MAME:s egen standard är cz600ce; den här kärnans är ipl10, ROM:et som de flesta samlingar har som iplrom.dat. Del av maskinen: en film behöver samma.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Huvudminnet, från 1 till 12 MB. En X68000 såldes med 1 eller 2 MB. MAME:s standard och den här kärnans är 4 MB, vilket räcker för de flesta program. Den är en del av maskinen, så en film behöver samma storlek.",
+		"slot.floppy": "Disketter",
+		"slot.floppy.help": "Spelets disketter, så många som det har. Den första ligger i enhet 0 och den andra i enhet 1 när maskinen startar, och maskinen startar från den första. Varje enhets styrningar Föregående disk och Nästa disk går igenom den här listan i ordning och hoppar över disken i den andra enheten, och Mata ut disk tömmer enheten. Det ett program skriver till en diskett stannar hos den under sessionen, även efter att den har matats ut, och dina filer ändras aldrig. Godtagna är X68000:s egna avbildningsformat (.dim, .xdf, .hdm, .2hd), D88-familjen och MAME:s diskettformat (.mfm, .td0, .imd, .86f, .mfi med flera).",
+		"slot.hdd": "Hårddisk",
+		"slot.hdd.help": "En SASI-hårddiskavbildning (.hdf), sådan som X68000-emulatorer skapar, på den ursprungliga X68000:s hårddiskport. Kärnan arbetar på en kopia i minnet: det som skrivs finns kvar under sessionen, ingår i sparade lägen, och Exportera sparad data skriver disken så som den är då, under sitt eget namn, vilket kan anges här för att fortsätta från den. Din fil ändras aldrig.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Maskinens 16 KB batteristödda minne (SRAM) så som det är vid start, i filen som Exportera sparad data skrev (SRAM.DAT). Det innehåller maskinens inställningar (startenhet, skärmläge, minnesbrytare) och allt ett program har lagrat där. Filen har den bytordning som en riktig X68000 läser. MAME:s egen nvram-fil känns också igen och godtas. Utan fil startar maskinen med ett tomt SRAM, som IPL-ROM:et sedan fyller i."
+	}
+}

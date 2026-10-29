@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "El reloj al encender, \"%1\", no es una fecha y hora de 1980 a 2079 escrita como AAAA-MM-DD HH:MM:SS.",
+		"error.bad_ipl": "'%1' no es una IPL-ROM que tenga este núcleo.",
+		"error.mame_exit": "La máquina se detuvo (código de salida de MAME %1).",
+		"error.mame_option": "MAME no tiene una opción \"%1\".",
+		"error.needs_firmware": "La X68000 necesita %1. Añádelo como firmware del proyecto.",
+		"error.no_driver": "La X68000 no está en la lista de controladores de esta compilación.",
+		"error.not_sram": "Los datos de guardado '%1' no son una SRAM de X68000 (16384 bytes).",
+		"error.sram_not_loaded": "No se pudo cargar la SRAM.",
+		"firmware.cgrom_dat": "ROM generadora de caracteres (cgrom.dat)",
+		"firmware.cgrom_dat.about": "La ROM de fuentes de la X68000 (768 KB). Contiene los caracteres kanji, kana y ASCII con los que todos los modelos dibujan su texto. Es de Sharp y tienes que proporcionarla. El mismo archivo se usa con todas las IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "La %1. El ajuste de IPL-ROM \"%2\" arranca la máquina desde este archivo, que tiene el nombre que le da MAME. Es de Sharp y tienes que proporcionarla.",
+		"setting.clock": "Reloj al encender",
+		"setting.clock.about": "La fecha y hora del reloj de la máquina (el chip RP5C15) al encender, escritas como AAAA-MM-DD HH:MM:SS, de 1980 a 2079. Desde ahí avanza con la máquina emulada y nunca con el reloj de tu ordenador. El sistema Human68k marca los archivos con él, y algunos programas toman de él sus números aleatorios. Es parte de la máquina, así que una película necesita el mismo valor.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Qué IPL-ROM (la BIOS de la X68000) arranca la máquina: %1. Cada una es su propio archivo de firmware. El predeterminado de MAME es cz600ce; el de este núcleo es ipl10, la ROM que llevan la mayoría de colecciones como iplrom.dat. Es parte de la máquina: una película necesita la misma.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "La memoria principal, de 1 a 12 MB. La X68000 se vendía con 1 o 2 MB. El predeterminado de MAME y el de este núcleo es 4 MB, suficiente para la mayoría del software. Es parte de la máquina, así que una película necesita el mismo tamaño.",
+		"slot.floppy": "Disquetes",
+		"slot.floppy.help": "Los discos del juego, tantos como tenga. El primero va en la unidad 0 y el segundo en la unidad 1 al arrancar la máquina, y la máquina arranca desde el primero. Los controles Disco anterior y Disco siguiente de cada unidad recorren esta lista en su orden, saltando el disco de la otra unidad, y Expulsar disco vacía la unidad. Lo que un programa escribe en un disco se queda con él durante la sesión, también después de sacarlo, y tus archivos nunca se cambian. Se aceptan los formatos de imagen propios de la X68000 (.dim, .xdf, .hdm, .2hd), la familia D88 y los formatos de disquete de MAME (.mfm, .td0, .imd, .86f, .mfi y otros).",
+		"slot.hdd": "Disco duro",
+		"slot.hdd.help": "Una imagen de disco duro SASI (.hdf), como las que hacen los emuladores de X68000, en el puerto de disco duro de la X68000 original. El núcleo trabaja con una copia en memoria: lo que se escribe se queda durante la sesión, forma parte de los estados guardados, y Exportar datos de guardado escribe el disco tal como está entonces, con su propio nombre, que puede darse aquí para seguir desde él. Tu archivo nunca se cambia.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Los 16 KB de memoria con batería de la máquina (SRAM) tal como están al encender, en el archivo que escribió Exportar datos de guardado (SRAM.DAT). Guarda los ajustes de la máquina (dispositivo de arranque, modo de pantalla, interruptores de memoria) y lo que un programa haya guardado allí. El archivo está en el orden de bytes que lee una X68000 real. El archivo nvram de MAME también se reconoce y se acepta. Sin archivo, la máquina arranca con una SRAM vacía, que la IPL-ROM después rellena."
+	}
+}

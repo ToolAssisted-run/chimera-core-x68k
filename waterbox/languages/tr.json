@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Açılıştaki saat, \"%1\", YYYY-MM-DD HH:MM:SS biçiminde yazılmış 1980 ile 2079 arasında bir tarih ve saat değil.",
+		"error.bad_ipl": "'%1', bu çekirdeğin sahip olduğu bir IPL-ROM değil.",
+		"error.mame_exit": "Makine durdu (MAME çıkış kodu %1).",
+		"error.mame_option": "MAME'in \"%1\" seçeneği yok.",
+		"error.needs_firmware": "X68000, %1 ister. Bunu projenin firmware'i olarak ekleyin.",
+		"error.no_driver": "X68000, bu derlemenin sürücü listesinde yok.",
+		"error.not_sram": "'%1' kayıt verisi bir X68000 SRAM'i değil (16384 bayt).",
+		"error.sram_not_loaded": "SRAM yüklenemedi.",
+		"firmware.cgrom_dat": "Karakter üreteci ROM'u (cgrom.dat)",
+		"firmware.cgrom_dat.about": "X68000'in yazı tipi ROM'u (768 KB). Her model metnini çizmek için kullanan kanji, kana ve ASCII karakterlerini içerir. Sharp'a aittir ve bunu sizin sağlamanız gerekir. Aynı dosya her IPL-ROM ile kullanılır.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. IPL-ROM ayarı \"%2\", makineyi MAME'in bu dosyaya verdiği adla bu dosyadan başlatır. Sharp'a aittir ve bunu sizin sağlamanız gerekir.",
+		"setting.clock": "Açılışta saat",
+		"setting.clock.about": "Makinenin saatinin (RP5C15 çipi) açılışta gösterdiği tarih ve saat; YYYY-MM-DD HH:MM:SS biçiminde, 1980 ile 2079 arası. Oradan itibaren öykülenen makineyle birlikte işler ve asla bilgisayarınızın saatiyle değil. Human68k sistemi dosyalara bununla damga vurur ve bazı programlar rastgele sayılarını bundan alır. Makinenin bir parçasıdır, bu yüzden bir kaydın aynı değere ihtiyacı vardır.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Makinenin açıldığı IPL-ROM (X68000'in BIOS'u): %1. Her biri kendi yazılım dosyasıdır. MAME'in kendi varsayılanı cz600ce'dir; bu çekirdeğin varsayılanı ise çoğu koleksiyonun iplrom.dat olarak taşıdığı ipl10'dur. Makinenin bir parçasıdır: bir kaydın aynısı gerekir.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Ana bellek, 1 ila 12 MB. Bir X68000, 1 ya da 2 MB ile satılırdı. MAME'in varsayılanı ve bu çekirdeğin varsayılanı 4 MB'tır; çoğu yazılım için yeterlidir. Makinenin bir parçasıdır, bu yüzden bir kaydın aynı boyuta ihtiyacı vardır.",
+		"slot.floppy": "Disketler",
+		"slot.floppy.help": "Oyunun sahip olduğu kadar disk. İlki 0. sürücüde, ikincisi makine açıldığında 1. sürücüdedir ve makine ilkinden başlar. Her sürücünün Önceki Disk ve Sonraki Disk denetimleri bu listeyi kendi sırasıyla gezer, öbür sürücüdeki diski atlayarak; Diski Çıkar ise sürücüyü boşaltır. Bir programın bir diske yazdığı şey oturum boyunca diskte kalır, çıktıktan sonra da; dosyalarınız asla değiştirilmez. Kabul edilenler X68000'in kendi görüntü biçimleri (.dim, .xdf, .hdm, .2hd), D88 ailesi ve MAME'in disket biçimleridir (.mfm, .td0, .imd, .86f, .mfi ve diğerleri).",
+		"slot.hdd": "Sabit disk",
+		"slot.hdd.help": "Özgün X68000'in sabit disk bağlantı noktasında, X68000 öykünücülerinin yaptığı gibi bir SASI sabit disk görüntüsü (.hdf). Çekirdek bellekteki bir kopyayla çalışır: yazılanlar oturum boyunca kalır, durum kayıtlarının bir parçasıdır ve Export Save Data diski o andaki haliyle, kendi adıyla yazar; bu, ondan devam etmek için buraya verilebilir. Dosyanız değiştirilmez.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Makinenin 16 KB'lik pil destekli belleği (SRAM), açılıştaki haliyle; Export Save Data'nın yazdığı dosyada (SRAM.DAT). Makinenin ayarlarını (başlangıç aygıtı, ekran modu, bellek anahtarları) ve bir programın orada sakladığı her şeyi tutar. Dosya, gerçek bir X68000'in okuduğu bayt sırasındadır. MAME'in kendi nvram dosyası da tanınır ve kabul edilir. Dosya yoksa makine boş bir SRAM ile başlar ve IPL-ROM onu doldurur."
+	}
+}

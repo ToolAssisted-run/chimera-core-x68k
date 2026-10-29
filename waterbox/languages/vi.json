@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Đồng hồ khi bật máy, \"%1\", không phải ngày giờ từ 1980 đến 2079 viết theo dạng YYYY-MM-DD HH:MM:SS.",
+		"error.bad_ipl": "'%1' không phải IPL-ROM mà core này có.",
+		"error.mame_exit": "Máy đã dừng (mã thoát MAME %1).",
+		"error.mame_option": "MAME không có tùy chọn \"%1\".",
+		"error.needs_firmware": "X68000 cần %1. Thêm nó làm firmware của dự án.",
+		"error.no_driver": "X68000 không có trong danh sách driver của bản build này.",
+		"error.not_sram": "Dữ liệu lưu '%1' không phải SRAM của X68000 (16384 byte).",
+		"error.sram_not_loaded": "Không nạp được SRAM.",
+		"firmware.cgrom_dat": "ROM tạo ký tự (cgrom.dat)",
+		"firmware.cgrom_dat.about": "ROM font của X68000 (768 KB). Nó chứa các ký tự kanji, kana và ASCII mà mọi mẫu máy dùng để vẽ chữ. Đây là của Sharp và bạn phải tự cung cấp. Cùng một tệp được dùng với mọi IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. Cài đặt IPL-ROM \"%2\" khởi động máy từ tệp này, có tên mà MAME đặt cho nó. Đây là của Sharp và bạn phải tự cung cấp.",
+		"setting.clock": "Đồng hồ khi bật máy",
+		"setting.clock.about": "Ngày và giờ của đồng hồ máy (chip RP5C15) khi bật, viết theo dạng YYYY-MM-DD HH:MM:SS, từ 1980 đến 2079. Từ đó nó chạy cùng máy được mô phỏng và không bao giờ cùng đồng hồ máy tính của bạn. Hệ điều hành Human68k đóng dấu tệp bằng nó, và một số chương trình chọn số ngẫu nhiên từ nó. Nó là một phần của máy, nên movie cần cùng giá trị.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "IPL-ROM nào (BIOS của X68000) máy khởi động: %1. Mỗi cái là firmware riêng của nó. Mặc định của MAME là cz600ce; của core này là ipl10, ROM mà đa số bộ sưu tập mang dưới tên iplrom.dat. Là một phần của máy: movie cần cùng một cái.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Bộ nhớ chính, từ 1 đến 12 MB. X68000 được bán với 1 hoặc 2 MB. Mặc định của MAME và của core này là 4 MB, đủ cho đa số phần mềm. Nó là một phần của máy, nên movie cần cùng kích thước.",
+		"slot.floppy": "Đĩa mềm",
+		"slot.floppy.help": "Các đĩa của game, bao nhiêu cái tùy ý. Cái đầu tiên ở ổ 0 và cái thứ hai ở ổ 1 khi máy khởi động, và máy khởi động từ cái đầu tiên. Điều khiển Previous Disk và Next Disk của mỗi ổ đi qua danh sách này theo thứ tự, bỏ qua đĩa ở ổ kia, và Eject Disk làm trống ổ. Những gì chương trình ghi lên đĩa được giữ với nó trong phiên, kể cả sau khi nó ra, và tệp của bạn không bao giờ bị thay đổi. Chấp nhận các định dạng ảnh của chính X68000 (.dim, .xdf, .hdm, .2hd), họ D88, và các định dạng đĩa mềm của MAME (.mfm, .td0, .imd, .86f, .mfi và những định dạng khác).",
+		"slot.hdd": "Ổ cứng",
+		"slot.hdd.help": "Ảnh ổ cứng SASI (.hdf), như các emulator X68000 tạo, trên cổng ổ cứng của X68000 gốc. Core làm việc trên một bản sao trong bộ nhớ: những gì được ghi giữ trong phiên, là một phần của trạng thái đã lưu, và Export Save Data ghi ổ đĩa đúng như lúc đó, dưới tên riêng của nó. Tên đó có thể đưa vào đây để tiếp tục từ nó. Tệp của bạn không bao giờ bị thay đổi.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "16 KB bộ nhớ có pin (SRAM) của máy như lúc bật nguồn, trong tệp mà Export Save Data đã ghi (SRAM.DAT). Nó chứa cài đặt của máy (thiết bị khởi động, chế độ màn hình, công tắc bộ nhớ) và bất cứ thứ gì chương trình đã lưu ở đó. Tệp theo thứ tự byte mà X68000 thật đọc. Tệp nvram của MAME cũng được nhận ra và chấp nhận. Không có tệp, máy khởi động với SRAM trống, và IPL-ROM sẽ điền vào."
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "The clock at power-on, \"%1\", is not a date and time from 1980 to 2079 written as YYYY-MM-DD HH:MM:SS.",
+		"error.bad_ipl": "'%1' is not an IPL-ROM this core has.",
+		"error.mame_exit": "The machine stopped (MAME exit code %1).",
+		"error.mame_option": "MAME has no option \"%1\".",
+		"error.needs_firmware": "The X68000 needs %1. Add it as the project's firmware.",
+		"error.no_driver": "The X68000 is not in this build's driver list.",
+		"error.not_sram": "The save data '%1' is not an X68000 SRAM (16384 bytes).",
+		"error.sram_not_loaded": "The SRAM could not be loaded.",
+		"firmware.cgrom_dat": "Character generator ROM (cgrom.dat)",
+		"firmware.cgrom_dat.about": "The X68000's font ROM (768 KB). It holds the kanji, kana and ASCII characters that every model draws its text with. It is Sharp's and you have to supply it. The same file is used with every IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "The %1. The IPL-ROM setting \"%2\" starts the machine from this file, which has the name MAME gives it. It is Sharp's and you have to supply it.",
+		"setting.clock": "Clock at power-on",
+		"setting.clock.about": "The date and time of the machine's clock (the RP5C15 chip) at power-on, written as YYYY-MM-DD HH:MM:SS, from 1980 to 2079. From there it runs with the emulated machine and never with your computer's clock. The Human68k system stamps files with it and some programs pick their random numbers from it. It is part of the machine, so a movie needs the same value.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Which IPL-ROM (the X68000's BIOS) the machine boots: %1. Each is its own firmware file. MAME's own default is cz600ce; this core's is ipl10, the ROM most collections carry as iplrom.dat. Part of the machine: a movie needs the same one.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "The main memory, from 1 to 12 MB. An X68000 was sold with 1 or 2 MB. MAME's default and this core's is 4 MB, which is enough for most software. It is part of the machine, so a movie needs the same size.",
+		"slot.floppy": "Floppy disks",
+		"slot.floppy.help": "The game's disks, as many as it has. The first is in drive 0 and the second in drive 1 when the machine starts, and the machine starts from the first. Each drive's Previous Disk and Next Disk controls go through this list in its order, passing over the disk in the other drive, and Eject Disk empties the drive. What a program writes to a disk stays with it for the session, also after it comes out, and your files are never changed. Accepted are the X68000's own image formats (.dim, .xdf, .hdm, .2hd), the D88 family, and MAME's floppy formats (.mfm, .td0, .imd, .86f, .mfi and others).",
+		"slot.hdd": "Hard disk",
+		"slot.hdd.help": "A SASI hard disk image (.hdf), as X68000 emulators make them, on the original X68000's hard disk port. The core works on a copy in memory: what is written stays for the session, is part of savestates, and Export Save Data writes the disk as it is then, under its own name, which can be given here to go on from it. Your file is never changed.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "The machine's 16 KB of battery-backed memory (SRAM) as it is at power-on, in the file Export Save Data wrote (SRAM.DAT). It holds the machine's settings (start-up device, screen mode, memory switches) and anything a program stored there. The file is in the byte order a real X68000 reads. MAME's own nvram file is also recognised and accepted. With no file the machine starts with an empty SRAM, which the IPL-ROM then fills in."
+	}
+}

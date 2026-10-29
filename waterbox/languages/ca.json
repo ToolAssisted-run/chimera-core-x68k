@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "El rellotge en engegar, \"%1\", no és una data i hora de 1980 a 2079 escrites com AAAA-MM-DD HH:MM:SS.",
+		"error.bad_ipl": "'%1' no és una IPL-ROM que tingui aquest nucli.",
+		"error.mame_exit": "La màquina s'ha aturat (codi de sortida de MAME %1).",
+		"error.mame_option": "MAME no té cap opció \"%1\".",
+		"error.needs_firmware": "La X68000 necessita %1. Afegiu-lo com a microprogramari del projecte.",
+		"error.no_driver": "La X68000 no és a la llista de controladors d'aquesta compilació.",
+		"error.not_sram": "Les dades desades '%1' no són una SRAM de X68000 (16384 bytes).",
+		"error.sram_not_loaded": "No s'ha pogut carregar la SRAM.",
+		"firmware.cgrom_dat": "ROM generadora de caràcters (cgrom.dat)",
+		"firmware.cgrom_dat.about": "La ROM de tipus de lletra de la X68000 (768 KB). Conté els caràcters kanji, kana i ASCII amb què cada model dibuixa el seu text. És de Sharp i l'heu de proporcionar vosaltres. El mateix fitxer es fa servir amb cada IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "La %1. La configuració IPL-ROM \"%2\" arrenca la màquina des d'aquest fitxer, que té el nom que li dona MAME. És de Sharp i l'heu de proporcionar vosaltres.",
+		"setting.clock": "Rellotge en engegar",
+		"setting.clock.about": "La data i hora del rellotge de la màquina (el xip RP5C15) en engegar, escrites com AAAA-MM-DD HH:MM:SS, de 1980 a 2079. A partir d'aquí funciona amb la màquina emulada i mai amb el rellotge del vostre ordinador. El sistema Human68k marca els fitxers amb ell i alguns programes trien els seus números aleatoris a partir d'ell. Forma part de la màquina, de manera que un moviment necessita el mateix valor.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Quina IPL-ROM (la BIOS de la X68000) arrenca la màquina: %1. Cada una és el seu propi fitxer de microprogramari. El valor per defecte de MAME és cz600ce; el d'aquest nucli és ipl10, la ROM que porten la majoria de col·leccions com a iplrom.dat. És part de la màquina: un moviment necessita la mateixa.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "La memòria principal, de 1 a 12 MB. Una X68000 es va vendre amb 1 o 2 MB. El valor per defecte de MAME i el d'aquest nucli és de 4 MB, que basta per a gairebé tot el programari. Forma part de la màquina, de manera que un moviment necessita la mateixa mida.",
+		"slot.floppy": "Disquets",
+		"slot.floppy.help": "Els discs del joc, tants com en tingui. El primer és a la unitat 0 i el segon a la unitat 1 quan s'engega la màquina, i la màquina arrenca des del primer. Els controls Disc anterior i Disc següent de cada unitat recorren aquesta llista en el seu ordre, saltant el disc de l'altra unitat, i Expulsa el disc buida la unitat. Allò que un programa escriu a un disc es queda amb ell durant la sessió, també després que surti, i els vostres fitxers mai no es canvien. S'accepten els formats d'imatge propis de la X68000 (.dim, .xdf, .hdm, .2hd), la família D88, i els formats de disquet de MAME (.mfm, .td0, .imd, .86f, .mfi i altres).",
+		"slot.hdd": "Disc dur",
+		"slot.hdd.help": "Una imatge de disc dur SASI (.hdf), com les que fan els emuladors de X68000, a la connexió de disc dur de la X68000 original. El nucli treballa sobre una còpia a la memòria: allò que s'escriu es queda durant la sessió, forma part dels estats desats, i Exporta les dades desades escriu el disc tal com està en aquell moment, amb el seu propi nom, que es pot donar aquí per continuar des d'ell. El vostre fitxer mai no es canvia.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Els 16 KB de memòria amb bateria de la màquina (SRAM) tal com són en engegar, al fitxer que va escriure Exporta les dades desades (SRAM.DAT). Conté la configuració de la màquina (dispositiu d'arrencada, mode de pantalla, interruptors de memòria) i tot el que un programa hi hagi guardat. El fitxer està en l'ordre de bytes que llegeix una X68000 real. El fitxer de memòria nvram de MAME també es reconeix i s'accepta. Sense fitxer la màquina arrenca amb una SRAM buida, que després omple la IPL-ROM."
+	}
+}

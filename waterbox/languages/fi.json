@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Kello käynnistyksessä, \"%1\", ei ole päivämäärä ja kellonaika vuosilta 1980–2079 muodossa VVVV-KK-PP TT:MM:SS.",
+		"error.bad_ipl": "'%1' ei ole IPL-ROM, jonka tällä ytimellä on.",
+		"error.mame_exit": "Kone pysähtyi (MAME:n lopetuskoodi %1).",
+		"error.mame_option": "MAME:lla ei ole vaihtoehtoa \"%1\".",
+		"error.needs_firmware": "X68000 tarvitsee: %1. Lisää se projektin laiteohjelmistoksi.",
+		"error.no_driver": "X68000 ei ole tämän version ajurilistassa.",
+		"error.not_sram": "Tallennetut tiedot '%1' eivät ole X68000 SRAM (16384 tavua).",
+		"error.sram_not_loaded": "SRAM:ia ei voitu ladata.",
+		"firmware.cgrom_dat": "Merkkigeneraattorin ROM (cgrom.dat)",
+		"firmware.cgrom_dat.about": "X68000:n fonttiROM (768 KB). Se sisältää kanji-, kana- ja ASCII-merkit, joilla jokainen malli piirtää tekstinsä. Sharp omistaa sen, ja sinun on toimitettava se itse. Sama tiedosto käytetään jokaisen IPL-ROM:in kanssa.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. IPL-ROM-asetus \"%2\" käynnistää koneen tästä tiedostosta, jolla on MAME:n antama nimi. Sharp omistaa sen, ja sinun on toimitettava se itse.",
+		"setting.clock": "Kello käynnistyksessä",
+		"setting.clock.about": "Koneen kellon (RP5C15-siru) päivämäärä ja kellonaika käynnistyksessä, muodossa VVVV-KK-PP TT:MM:SS, vuodesta 1980 vuoteen 2079. Sieltä eteenpäin se kulkee emuloidun koneen mukana eikä koskaan tietokoneesi kellon. Human68k leimaa tiedostot sen mukaan, ja jotkin ohjelmat ottavat siitä satunnaislukunsa. Se kuuluu koneeseen, joten elokuva tarvitsee saman arvon.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Mikä IPL-ROM (X68000:n BIOS) kone käynnistää: %1. Jokainen on oma laiteohjelmistotiedostonsa. MAME:n oma oletus on cz600ce. Tämän ytimen oletus on ipl10, ROM, jonka useimmat kokoelmat kantavat tiedostona iplrom.dat. Osa konetta: elokuva tarvitsee saman.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Päämuisti, 1–12 MB. X68000 myytiin 1 tai 2 MB:n muistilla. MAME:n oletus ja tämän ytimen oletus on 4 MB, mikä riittää useimmille ohjelmille. Se kuuluu koneeseen, joten elokuva tarvitsee saman koon.",
+		"slot.floppy": "Levykkeet",
+		"slot.floppy.help": "Pelin levykkeet, niin monta kuin sillä on. Ensimmäinen on asemassa 0 ja toinen asemassa 1, kun kone käynnistyy, ja kone käynnistyy ensimmäisestä. Kunkin aseman Previous Disk- ja Next Disk -ohjaimet käyvät tätä luetteloa läpi sen järjestyksessä ja ohittavat toisen aseman levyn, ja Eject Disk tyhjentää aseman. Mitä ohjelma kirjoittaa levylle, pysyy sillä istunnon ajan, myös levyn ulos otettua, eikä tiedostojasi muuteta koskaan. Hyväksytään X68000:n omat kuvamuodot (.dim, .xdf, .hdm, .2hd), D88-perhe ja MAME:n levykemuodot (.mfm, .td0, .imd, .86f, .mfi ja muut).",
+		"slot.hdd": "Kiintolevy",
+		"slot.hdd.help": "SASI-kiintolevykuva (.hdf), jollaisia X68000-emulaattorit tekevät, alkuperäisen X68000:n kiintolevyporttiin. Ydin työskentelee muistissa olevalla kopiolla: kirjoitettu pysyy istunnon ajan, kuuluu tilatallenteisiin, ja Export Save Data kirjoittaa levyn silloisena, omalla nimellään. Sen voi antaa tähän, jotta jatkaa siitä. Tiedostoasi ei muuteta koskaan.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Koneen 16 KB:n akkuvaraamainen muisti (SRAM) sellaisena kuin se on käynnistyksessä, tiedostossa, jonka Export Save Data kirjoitti (SRAM.DAT). Se sisältää koneen asetukset (käynnistyslaite, näyttötila, muistikytkimet) ja kaiken, minkä ohjelma sinne tallensi. Tiedosto on siinä tavujärjestyksessä, jonka oikea X68000 lukee. MAME:n oma nvram-tiedosto tunnistetaan myös ja hyväksytään. Ilman tiedostoa kone käynnistyy tyhjällä SRAM:illa, jonka IPL-ROM sitten täyttää."
+	}
+}

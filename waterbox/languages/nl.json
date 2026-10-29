@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "De klok bij inschakelen, \"%1\", is geen datum en tijd van 1980 tot 2079 geschreven als JJJJ-MM-DD UU:MM:SS.",
+		"error.bad_ipl": "'%1' is geen IPL-ROM dat deze core heeft.",
+		"error.mame_exit": "De machine is gestopt (afsluitcode van MAME %1).",
+		"error.mame_option": "MAME heeft geen optie \"%1\".",
+		"error.needs_firmware": "De X68000 heeft %1 nodig. Voeg dat toe als firmware van het project.",
+		"error.no_driver": "De X68000 staat niet in de stuurprogrammalijst van deze build.",
+		"error.not_sram": "De opgeslagen gegevens '%1' zijn geen X68000-SRAM (16384 bytes).",
+		"error.sram_not_loaded": "De SRAM kon niet worden geladen.",
+		"firmware.cgrom_dat": "Tekengeneratorrom (cgrom.dat)",
+		"firmware.cgrom_dat.about": "Het lettertype-ROM van de X68000 (768 KB). Het bevat de kanji-, kana- en ASCII-tekens waarmee elk model zijn tekst tekent. Het is van Sharp en u moet het zelf aanleveren. Hetzelfde bestand wordt met elk IPL-ROM gebruikt.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "De %1. De instelling IPL-ROM \"%2\" start de machine vanuit dit bestand, dat de naam heeft die MAME eraan geeft. Het is van Sharp en u moet het zelf aanleveren.",
+		"setting.clock": "Klok bij inschakelen",
+		"setting.clock.about": "De datum en tijd van de klok van de machine (de RP5C15-chip) bij het inschakelen, geschreven als JJJJ-MM-DD UU:MM:SS, van 1980 tot 2079. Vanaf dat moment loopt hij met de geëmuleerde machine en nooit met de klok van uw computer. Het systeem Human68k zet er bestanden mee een tijdstempel op, en sommige programma's halen er hun willekeurige getallen uit. Het hoort bij de machine, dus een opname heeft dezelfde waarde nodig.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Welk IPL-ROM (het BIOS van de X68000) de machine opstart: %1. Elk is een eigen firmwarebestand. De eigen standaard van MAME is cz600ce; die van deze core is ipl10, het ROM dat de meeste verzamelingen als iplrom.dat bevatten. Onderdeel van de machine: een opname heeft dezelfde nodig.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Het hoofdgeheugen, van 1 tot 12 MB. Een X68000 werd verkocht met 1 of 2 MB. De standaard van MAME en die van deze core is 4 MB, wat voor de meeste software genoeg is. Het hoort bij de machine, dus een opname heeft dezelfde grootte nodig.",
+		"slot.floppy": "Diskettes",
+		"slot.floppy.help": "De diskettes van het spel, zoveel als het heeft. De eerste zit bij het starten van de machine in station 0 en de tweede in station 1, en de machine start met de eerste. De besturingen Vorige schijf en Volgende schijf van elk station gaan door deze lijst in zijn volgorde, waarbij de schijf in het andere station wordt overgeslagen, en Schijf uitwerpen maakt het station leeg. Wat een programma op een diskette schrijft, blijft voor de sessie bij die diskette, ook nadat hij eruit is, en uw bestanden worden nooit gewijzigd. Aanvaard zijn de eigen beeldformaten van de X68000 (.dim, .xdf, .hdm, .2hd), de D88-familie en de diskettenformaten van MAME (.mfm, .td0, .imd, .86f, .mfi en andere).",
+		"slot.hdd": "Harde schijf",
+		"slot.hdd.help": "Een SASI-harde-schijfimage (.hdf), zoals X68000-emulators die maken, op de harde-schijfpoort van de echte X68000. De core werkt op een kopie in het geheugen: wat wordt geschreven, blijft voor de sessie, hoort bij de savestates, en Export Save Data schrijft de schijf dan zoals hij is, onder zijn eigen naam. Die kan hier worden opgegeven om er verder mee te gaan. Uw bestand wordt nooit gewijzigd.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Het batterijgeheugen van 16 KB (SRAM) van de machine, zoals het bij het inschakelen is, in het bestand dat Export Save Data schreef (SRAM.DAT). Het bevat de instellingen van de machine (opstartapparaat, schermmodus, geheugenschakelaars) en alles wat een programma erin heeft opgeslagen. Het bestand staat in de bytevolgorde die een echte X68000 leest. Het nvram-bestand van MAME wordt ook herkend en aanvaard. Zonder bestand start de machine met een lege SRAM, die het IPL-ROM daarna invult."
+	}
+}

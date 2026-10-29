@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "Ceasul la pornire, „%1”, nu este o dată și o oră din 1980 până în 2079 scrise ca AAAA-LL-ZZ HH:MM:SS.",
+		"error.bad_ipl": "'%1' nu este un IPL-ROM pe care îl are acest nucleu.",
+		"error.mame_exit": "Aparatul s-a oprit (codul de ieșire MAME %1).",
+		"error.mame_option": "MAME nu are opțiunea „%1”.",
+		"error.needs_firmware": "X68000 are nevoie de %1. Adăugați-l ca firmware al proiectului.",
+		"error.no_driver": "X68000 nu se află în lista de drivere a acestui build.",
+		"error.not_sram": "Datele salvate '%1' nu sunt un SRAM X68000 (16384 octeți).",
+		"error.sram_not_loaded": "SRAM-ul nu a putut fi încărcat.",
+		"firmware.cgrom_dat": "Generator de caractere ROM (cgrom.dat)",
+		"firmware.cgrom_dat.about": "ROM-ul de fonturi al X68000 (768 KB). Conține caracterele kanji, kana și ASCII cu care desenează textul fiecare model. Este al Sharp și trebuie să îl furnizați dumneavoastră. Același fișier este folosit cu fiecare IPL-ROM.",
+		"firmware.ipl": "%1 (%2)",
+		"firmware.ipl.about": "%1. Setarea IPL-ROM „%2” pornește aparatul de la acest fișier, care are numele pe care i-l dă MAME. Este al Sharp și trebuie să îl furnizați dumneavoastră.",
+		"setting.clock": "Ceasul la pornire",
+		"setting.clock.about": "Data și ora ceasului aparatului (cipul RP5C15) la pornire, scrise ca AAAA-LL-ZZ HH:MM:SS, din 1980 până în 2079. De acolo rulează cu aparatul emulat și niciodată cu ceasul calculatorului dumneavoastră. Sistemul Human68k marchează fișierele cu el, iar unele programe își aleg numerele aleatoare din el. Face parte din aparat, deci o înregistrare are nevoie de aceeași valoare.",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "Ce IPL-ROM (BIOS-ul X68000) pornește aparatul: %1. Fiecare este propriul fișier de firmware. Implicitul MAME este cz600ce; cel al acestui nucleu este ipl10, ROM-ul pe care îl au cele mai multe colecții ca iplrom.dat. Face parte din aparat: o înregistrare are nevoie de același.",
+		"setting.ram": "RAM",
+		"setting.ram.about": "Memoria principală, de la 1 la 12 MB. Un X68000 se vindea cu 1 sau 2 MB. Implicitul MAME și al acestui nucleu este 4 MB, suficient pentru cele mai multe programe. Face parte din aparat, deci o înregistrare are nevoie de aceeași dimensiune.",
+		"slot.floppy": "Dischete",
+		"slot.floppy.help": "Dischetele jocului, câte are el. Prima este în unitatea 0, iar a doua în unitatea 1, când pornește aparatul, iar aparatul pornește de la prima. Controalele Previous Disk și Next Disk ale fiecărei unități trec prin această listă în ordinea ei, sărind peste discul din cealaltă unitate, iar Eject Disk golește unitatea. Ce scrie un program pe disc rămâne cu el pe durata sesiunii, și după ce iese, iar fișierele dumneavoastră nu se modifică niciodată. Sunt acceptate formatele de imagine proprii X68000 (.dim, .xdf, .hdm, .2hd), familia D88 și formatele de dischetă ale MAME (.mfm, .td0, .imd, .86f, .mfi și altele).",
+		"slot.hdd": "Hard disk",
+		"slot.hdd.help": "O imagine de hard disk SASI (.hdf), cum fac emulatoarele X68000, pe portul de hard disk al X68000 original. Nucleul lucrează pe o copie din memorie: ce se scrie rămâne pe durata sesiunii, face parte din stările salvate, iar Export Save Data scrie discul așa cum este atunci, sub numele său, care poate fi dat aici ca să continuați de la el. Fișierul dumneavoastră nu se modifică niciodată.",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "Cei 16 KB de memorie cu baterie (SRAM) ai aparatului, așa cum sunt la pornire, în fișierul scris de Export Save Data (SRAM.DAT). Conține setările aparatului (dispozitivul de pornire, modul de ecran, comutatoarele de memorie) și orice a stocat un program acolo. Fișierul este în ordinea de octeți pe care o citește un X68000 real. Fișierul nvram al MAME este de asemenea recunoscut și acceptat. Fără fișier, aparatul pornește cu un SRAM gol, pe care IPL-ROM îl completează apoi."
+	}
+}

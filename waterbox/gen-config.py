@@ -19,6 +19,29 @@ import os
 import subprocess
 import sys
 
+# ---- the texts a person reads ----------------------------------------------
+# Every one is a key of languages/en.json (chimera docs/translations.md):
+# text() records the key's English and returns the key, each of its
+# arguments after it behind a 0x1F; write_texts() puts them in the table,
+# beside the keys the core's code names.
+TEXTS = {}
+
+
+def text(key, english, *args):
+    if TEXTS.setdefault(key, english) != english:
+        sys.exit("%s has two texts: %r and %r" % (key, TEXTS[key], english))
+    return "\x1f".join([key] + [str(a) for a in args])
+
+
+def write_texts(path):
+    table = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {"texts": {}}
+    table["texts"].update(TEXTS)
+    table["texts"] = dict(sorted(table["texts"].items()))
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(table, f, indent="\t", ensure_ascii=False)
+        f.write("\n")
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 PROBE = os.path.join(ROOT, "build", "native", "x68k-probe")
@@ -198,13 +221,13 @@ def main():
 
     firmware_decls = [{
         "id": "cgrom.dat",
-        "display": "Character generator ROM (cgrom.dat)",
-        "description": (
+        "display": text("firmware.cgrom_dat", "Character generator ROM (cgrom.dat)"),
+        "description": text("firmware.cgrom_dat.about", (
             "The X68000's font ROM (768 KB). It holds the kanji, kana and "
             "ASCII characters that every model draws its text with. It is "
             "Sharp's and you have to supply it. The same file is used with "
             "every IPL-ROM."
-        ),
+        )),
         "name": "cgrom.dat",
         "size": 786432,
         "sha1": "8d72c5b4d63bb14c5dbdac495244d659aa1498b6",
@@ -213,11 +236,11 @@ def main():
         for name, size, sha1 in files:
             firmware_decls.append({
                 "id": name,
-                "display": f"{label} ({name})",
-                "description": (
-                    f"The {label}. The IPL-ROM setting \"{setting}\" starts the machine from this "
+                "display": text("firmware.ipl", "%1 (%2)", label, name),
+                "description": text("firmware.ipl.about", (
+                    "The %1. The IPL-ROM setting \"%2\" starts the machine from this "
                     "file, which has the name MAME gives it. It is Sharp's and you have to supply it."
-                ),
+                ), label, setting),
                 "name": name,
                 "size": size,
                 "sha1": sha1,
@@ -291,44 +314,43 @@ def main():
         "settings": [
             {
                 "name": "ipl_rom",
-                "display": "IPL-ROM",
+                "display": text("setting.ipl_rom", "IPL-ROM"),
                 "type": "enum",
                 "options": [s for s, _, _ in IPL_ROMS],
                 "default": "ipl10",
-                "description": (
-                    "Which IPL-ROM (the X68000's BIOS) the machine boots: " + "; ".join(
-                        f"{s} = {label}" for s, label, _ in IPL_ROMS) + ". Each is its own "
+                "description": text("setting.ipl_rom.about", (
+                    "Which IPL-ROM (the X68000's BIOS) the machine boots: %1. Each is its own "
                     "firmware file. MAME's own default is cz600ce; this core's is ipl10, "
                     "the ROM most collections carry as iplrom.dat. Part of the machine: a movie "
                     "needs the same one."
-                ),
+                ), "; ".join(f"{s} = {label}" for s, label, _ in IPL_ROMS)),
             },
             {
                 "name": "ram",
-                "display": "RAM",
+                "display": text("setting.ram", "RAM"),
                 "type": "enum",
                 "options": RAM_SIZES,
                 "default": "4M",
                 "description": (
-                    "The main memory, from 1 to 12 MB. An X68000 was sold "
+                    text("setting.ram.about", "The main memory, from 1 to 12 MB. An X68000 was sold "
                     "with 1 or 2 MB. MAME's default and this core's is 4 MB,"
                     " which is enough for most software. It is part of the "
-                    "machine, so a movie needs the same size."
+                    "machine, so a movie needs the same size.")
                 ),
             },
             {
                 "name": "clock",
-                "display": "Clock at power-on",
+                "display": text("setting.clock", "Clock at power-on"),
                 "type": "string",
                 "default": "2000-01-01 00:00:00",
                 "description": (
-                    "The date and time of the machine's clock (the RP5C15 "
+                    text("setting.clock.about", "The date and time of the machine's clock (the RP5C15 "
                     "chip) at power-on, written as YYYY-MM-DD HH:MM:SS, from"
                     " 1980 to 2079. From there it runs with the emulated "
                     "machine and never with your computer's clock. The "
                     "Human68k system stamps files with it and some programs "
                     "pick their random numbers from it. It is part of the "
-                    "machine, so a movie needs the same value."
+                    "machine, so a movie needs the same value.")
                 ),
             },
         ],
@@ -345,12 +367,12 @@ def main():
         "slots": [
             {
                 "id": "floppy",
-                "title": "Floppy disks",
+                "title": text("slot.floppy", "Floppy disks"),
                 "min": 0,
                 "max": -1,
                 "formats": FLOPPY_FORMATS,
                 "help": (
-                    "The game's disks, as many as it has. The first is in "
+                    text("slot.floppy.help", "The game's disks, as many as it has. The first is in "
                     "drive 0 and the second in drive 1 when the machine "
                     "starts, and the machine starts from the first. Each "
                     "drive's Previous Disk and Next Disk controls go through "
@@ -360,33 +382,33 @@ def main():
                     "also after it comes out, and your files are never "
                     "changed. Accepted are the X68000's own image formats "
                     "(.dim, .xdf, .hdm, .2hd), the D88 family, and MAME's "
-                    "floppy formats (.mfm, .td0, .imd, .86f, .mfi and others)."
+                    "floppy formats (.mfm, .td0, .imd, .86f, .mfi and others).")
                 ),
             },
             {
                 "id": "hdd",
-                "title": "Hard disk",
+                "title": text("slot.hdd", "Hard disk"),
                 "min": 0,
                 "max": 1,
                 "formats": ["hdf"],
                 "help": (
-                    "A SASI hard disk image (.hdf), as X68000 emulators make "
+                    text("slot.hdd.help", "A SASI hard disk image (.hdf), as X68000 emulators make "
                     "them, on the original X68000's hard disk port. The core "
                     "works on a copy in memory: what is "
                     "written stays for the session, is part of savestates, "
                     "and Export Save Data writes the disk as it is then, "
                     "under its own name, which can be given here to go on "
-                    "from it. Your file is never changed."
+                    "from it. Your file is never changed.")
                 ),
             },
             {
                 "id": "savedata",
-                "title": "SRAM",
+                "title": text("slot.savedata", "SRAM"),
                 "min": 0,
                 "max": 1,
                 "formats": ["dat", "nv", "bin"],
                 "help": (
-                    "The machine's 16 KB of battery-backed memory (SRAM) as "
+                    text("slot.savedata.help", "The machine's 16 KB of battery-backed memory (SRAM) as "
                     "it is at power-on, in the file Export Save Data wrote "
                     "(SRAM.DAT). It holds the machine's settings (start-up "
                     "device, screen mode, memory switches) and anything a "
@@ -394,7 +416,7 @@ def main():
                     "real X68000 reads. MAME's own nvram file is also "
                     "recognised and accepted. With no file the machine "
                     "starts with an empty SRAM, which the IPL-ROM then fills"
-                    " in."
+                    " in.")
                 ),
             },
         ],
@@ -402,6 +424,7 @@ def main():
     with open(os.path.join(out, "file_slots.json"), "w") as f:
         json.dump(slots, f, indent=2, ensure_ascii=True)
         f.write("\n")
+    write_texts(os.path.join(out, "languages", "en.json"))
 
     binds = {CONTROLLER: {name: binding(name) for name in buttons}}
     kb = {

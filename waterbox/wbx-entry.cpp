@@ -19,6 +19,11 @@
 
 #include "x68k-driver.h"
 
+/* A text a person reads is a key of languages/en.json, each of its
+ * arguments after a TEXT_ARG (chimera docs/translations.md). TEXT_ARG is a
+ * string of its own so the byte after it is never read as more of its hex. */
+#define TEXT_ARG "\x1f"
+
 static char g_loadError[1024];
 /* the Hard disk slot's file, or empty: the name its exported copy goes by */
 static char g_hddName[512];
@@ -84,7 +89,7 @@ ECL_EXPORT int Init(void)
 	std::vector<const char *> firmware = IplFiles(bios);
 	if (firmware.empty())
 	{
-		snprintf(g_loadError, sizeof g_loadError, "unknown IPL-ROM \"%s\"", bios.c_str());
+		snprintf(g_loadError, sizeof g_loadError, "error.bad_ipl" TEXT_ARG "%s", bios.c_str());
 		return 0;
 	}
 	x68k_set_option("bios", bios.c_str());
@@ -98,7 +103,7 @@ ECL_EXPORT int Init(void)
 	if (!ClockOption(wbx_setting_str("clock", val, sizeof val) > 0 ? val : "2000-01-01 00:00:00", rtc))
 	{
 		snprintf(g_loadError, sizeof g_loadError,
-			"the clock at power-on \"%s\" is not a date and time from 1980 to 2079 as YYYY-MM-DD HH:MM:SS", val);
+			"error.bad_clock" TEXT_ARG "%s", val);
 		return 0;
 	}
 	x68k_set_option("rtc", rtc);
@@ -110,7 +115,7 @@ ECL_EXPORT int Init(void)
 		if (!Exists(need))
 		{
 			snprintf(g_loadError, sizeof g_loadError,
-				"the X68000 needs %s - add it as the project's firmware", need);
+				"error.needs_firmware" TEXT_ARG "%s", need);
 			return 0;
 		}
 	}
@@ -171,7 +176,7 @@ ECL_EXPORT int Init(void)
 		if (got != sizeof sram || x68k_set_sram(sram, got) != 0)
 		{
 			snprintf(g_loadError, sizeof g_loadError,
-				"the save data %s is not an X68000 SRAM (16384 bytes)", entry);
+				"error.not_sram" TEXT_ARG "%s", entry);
 			return 0;
 		}
 	}

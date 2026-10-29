@@ -1,0 +1,28 @@
+{
+	"texts": {
+		"error.bad_clock": "開機時的時鐘「%1」不是以 YYYY-MM-DD HH:MM:SS 格式寫出、介於 1980 至 2079 年之間的日期與時間。",
+		"error.bad_ipl": "「%1」不是本核心所具有的 IPL-ROM。",
+		"error.mame_exit": "機器已停止（MAME 結束代碼 %1）。",
+		"error.mame_option": "MAME 沒有選項「%1」。",
+		"error.needs_firmware": "X68000 需要 %1。請把它加為專案的韌體。",
+		"error.no_driver": "X68000 不在此版本的驅動程式清單中。",
+		"error.not_sram": "存檔資料「%1」不是 X68000 的 SRAM（16384 位元組）。",
+		"error.sram_not_loaded": "無法載入 SRAM。",
+		"firmware.cgrom_dat": "字元產生器 ROM（cgrom.dat）",
+		"firmware.cgrom_dat.about": "X68000 的字型 ROM（768 KB）。它包含每種機型繪製文字所用的漢字、假名與 ASCII 字元。這是 Sharp 的檔案，需要你自行提供。每一個 IPL-ROM 都使用同一個檔案。",
+		"firmware.ipl": "%1（%2）",
+		"firmware.ipl.about": "%1。IPL-ROM 設定「%2」會從此檔案啟動機器，檔名為 MAME 所取的名稱。這是 Sharp 的檔案，需要你自行提供。",
+		"setting.clock": "開機時的時鐘",
+		"setting.clock.about": "機器時鐘（RP5C15 晶片）在開機時的日期與時間，格式為 YYYY-MM-DD HH:MM:SS，範圍為 1980 至 2079。之後它隨模擬的機器運行，從不隨你電腦的時鐘運行。Human68k 系統會以它為檔案加上時間戳記，有些程式則從它取得亂數。它是機器的一部分，因此影片需要相同的數值。",
+		"setting.ipl_rom": "IPL-ROM",
+		"setting.ipl_rom.about": "機器開機時使用的 IPL-ROM（X68000 的 BIOS）：%1。每一個都是各自獨立的韌體檔案。MAME 自己的預設值為 cz600ce，本核心的預設值為 ipl10，這是多數收藏中以 iplrom.dat 形式附帶的 ROM。它是機器的一部分：影片需要相同的一個。",
+		"setting.ram": "RAM",
+		"setting.ram.about": "主記憶體，從 1 到 12 MB。X68000 出廠時配備 1 或 2 MB。MAME 的預設值與本核心的預設值為 4 MB，對大多數軟體而言已足夠。它是機器的一部分，因此影片需要相同的容量。",
+		"slot.floppy": "軟碟",
+		"slot.floppy.help": "遊戲的磁碟，數量不限。第一張在啟動時位於 0 號磁碟機，第二張位於 1 號磁碟機，機器從第一張開始。每台磁碟機的「上一張磁碟」與「下一張磁碟」控制項會依此清單的順序前進，並跳過另一台磁碟機中的磁碟。「退出磁碟」會清空磁碟機。程式寫入磁碟的內容會保留於本次工作階段，即使磁片退出後也是如此，而你的檔案永遠不會被更改。可接受的有 X68000 自己的映像格式（.dim、.xdf、.hdm、.2hd）、D88 系列，以及 MAME 的軟碟格式（.mfm、.td0、.imd、.86f、.mfi 等）。",
+		"slot.hdd": "硬碟",
+		"slot.hdd.help": "SASI 硬碟映像（.hdf），即 X68000 模擬器所製作的格式，用於原版 X68000 的硬碟連接埠。核心會在記憶體中處理一份副本：寫入的內容保留於本次工作階段，屬於即時存檔的一部分。「匯出存檔資料」會以當時的狀態，用它自己的名稱寫出磁碟，此處可以給予它，從它繼續。你的檔案永遠不會被更改。",
+		"slot.savedata": "SRAM",
+		"slot.savedata.help": "機器的 16 KB 電池備份記憶體（SRAM），即開機時的狀態，存於「匯出存檔資料」寫出的檔案（SRAM.DAT）中。它保存機器的設定（啟動裝置、螢幕模式、記憶體開關），以及程式儲存在那裡的任何內容。檔案採用真實 X68000 讀取的位元組順序。MAME 自己的 nvram 檔案也會被辨識並接受。沒有檔案時，機器會以空的 SRAM 啟動，之後由 IPL-ROM 填入。"
+	}
+}
