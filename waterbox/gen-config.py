@@ -253,6 +253,7 @@ def main():
         "systemNames": SYSTEM_NAMES,
         "author": "The MAME team; chimera port by Sergio Martin",
         "url": "https://github.com/ToolAssisted-run/chimera-core-x68k",
+        "runsOn": ["windows-x86_64", "linux-x86_64", "macos-x86_64"],
         "romFile": "floppy",
         "deterministic": True,
         "memoryLayoutMiB": [64, 8, 8, 64, 768],
